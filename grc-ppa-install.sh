@@ -32,4 +32,8 @@ sudo cp ./udev-rules/53-hackrf.rules /etc/udev/rules.d/.
 sudo cp ./udev-rules/64-limesuite.rules /etc/udev/rules.d/.
 sudo cp ./udev-rules/88-nuand.rules /etc/udev/rules.d/.
 sudo cp ./udev-rules/uhd-usrp.rules /etc/udev/rules.d/.
-sudo restart udev
+sudo udevadm control --reload-rules
+
+# create grc config file with entry to resolve xterm warning
+echo -e "[grc]\nxterm_executable=/usr/bin/xterm" > ~/.gnuradio/grc.conf
+
