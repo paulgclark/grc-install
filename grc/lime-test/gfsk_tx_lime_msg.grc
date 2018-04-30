@@ -1458,7 +1458,7 @@
     </param>
     <param>
       <key>args</key>
-      <value></value>
+      <value>driver=lime,soapy=0</value>
     </param>
     <param>
       <key>_enabled</key>
