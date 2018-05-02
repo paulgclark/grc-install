@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # start with update of existing apps
 sudo apt update
 sudo apt -y upgrade

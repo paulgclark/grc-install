@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # after installation completes, you'll be prompted to log in
 # you'll then be able to control selective sync and startup behavior
 # from the Dropbox icon in the upper right system tray 
