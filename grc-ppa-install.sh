@@ -1,6 +1,6 @@
 # start with update of existing apps
 sudo apt update
-sudo apt upgrade
+sudo apt -y upgrade
 
 # add repositories for bladerf, ettus, gqrx and myriadrf
 sudo add-apt-repository -y ppa:bladerf/bladerf
@@ -16,14 +16,18 @@ sudo apt install -y liblimesuite-dev
 sudo apt install -y limesuite-udev
 sudo apt install -y limesuite-images
 
-# install soapy sw
-sudo apt install -y soapysdr
+# install soapy sw (choose one of the following two depending on your OS)
+sudo apt install -y soapysdr # for Ubuntu 16.04
+#sudo apt install -y soapysdr-tools # for Ubuntu 18.04
+
+# same for both OS's
 sudo apt install -y soapysdr-module-lms7
 
 # install gnuradio and osmo
 sudo apt install -y gnuradio
 sudo apt install -y gr-osmosdr
 sudo apt install -y hackrf
+sudo apt install -y libcanberra-gtk-module # needed for 18.04
 
 # install rules files for non-root access to USB
 # note: if you run the install process with our SDR plugged in,
@@ -35,5 +39,7 @@ sudo cp ./udev-rules/uhd-usrp.rules /etc/udev/rules.d/.
 sudo udevadm control --reload-rules
 
 # create grc config file with entry to resolve xterm warning
+mkdir ~/.gnuradio # this directory will not exist unless grc already run
 echo -e "[grc]\nxterm_executable=/usr/bin/xterm" > ~/.gnuradio/grc.conf
+cp ./misc/config.conf ~/.gnuradio/.
 
