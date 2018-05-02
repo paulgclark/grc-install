@@ -16,8 +16,5 @@ sudo snap install pycharm-community --classic
 # install audacity
 sudo apt install -y audacity
 
-# install gr-limesdr
-sudo apt install -y cmake
-sudo apt install
 
 
