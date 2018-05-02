@@ -42,6 +42,6 @@ sudo udevadm control --reload-rules
 
 # create grc config file with entry to resolve xterm warning
 mkdir ~/.gnuradio # this directory will not exist unless grc already run
-echo -e "[grc]\nxterm_executable=/usr/bin/xterm" > ~/.gnuradio/grc.conf
+echo -e "[grc]\nxterm_executable=/usr/bin/xterm" > ~/.gnuradio/gnuradio.conf
 cp ./misc/config.conf ~/.gnuradio/.
 
