@@ -57,7 +57,7 @@ sudo -u "$username" make install
 
 # install the five intel_deb packages (downloadable?)
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
-mkdir opencl_binaries
+sudo -u "$username" mkdir opencl_binaries
 cd opencl_binaries
 sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/19.44.14658/intel-gmmlib_19.3.2_amd64.deb
 sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/19.44.14658/intel-igc-core_1.0.2714.1_amd64.deb
@@ -71,7 +71,7 @@ sudo apt install ocl-icd-opencl-dev
 
 # now install gr-fosphor itself
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
-git clone git://git.osmocom.org/gr-fosphor
+sudo -u "$username" git clone git://git.osmocom.org/gr-fosphor
 
 # need to use sed/awk to modify the following file:
 # gr-fosphor/grc/fosphor_qt_sink_c.xml
