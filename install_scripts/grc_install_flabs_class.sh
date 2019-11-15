@@ -16,6 +16,9 @@
 # If you run this script from another directory, you will break some
 # relative path links and the install will fail.
 
+# get username
+username=$SUDO_USER
+
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
 cd ~/install
@@ -24,11 +27,8 @@ SRC_PATH=$INSTALL_PATH/src
 TARGET_PATH=$INSTALL_PATH/sdr
 cd $SCRIPT_PATH
 
-# get username
-username=$SUDO_USER
-
-# source the environment setup script created in the gnuradio install
-sudo -u "$username" source $TARGET_PATH/setup_env.sh
+# execute the environment setup script created in the gnuradio install
+sudo -u "$username" bash $TARGET_PATH/setup_env.sh
 
 # install custom blocks
 sudo apt -y install cmake
@@ -39,10 +39,9 @@ sudo -u "$username" git clone https://github.com/paulgclark/gr-reveng
 sudo -u "$username" cd gr-reveng
 sudo -u "$username" mkdir build
 sudo -u "$username" cd build
-sudo -u "$username" cmake ../ 
+sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../ 
 sudo -u "$username" make
-sudo make install
-sudo ldconfig
+sudo -u "$username" make install
 
 # installing Python code for use in some exercises
 sudo -u "$username" cd "$SRC_PATH" # the class-specific Python code goes to same place
@@ -57,6 +56,3 @@ sudo -u "$username" echo "" >> ~/.bashrc
 sudo apt install -y vim
 sudo snap install pycharm-community --classic
 
-# run gnuradio-companion with FM radio loaded for test
-sudo -u "$username" cd "$SCRIPT_PATH"
-sudo -u "$username" gnuradio-companion ../grc/uhd-test/fm_receiver_hardware_uhd_uk.grc

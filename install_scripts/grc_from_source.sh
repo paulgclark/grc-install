@@ -108,9 +108,6 @@ sudo -u "$username" echo -e "" >> ~/.bashrc
 sudo -u "$username" echo -e "########## points to local install of gnuradio and uhd" >> ~/.bashrc
 sudo -u "$username" echo -e "source ~/install/sdr/setup_env.sh" >> ~/.bashrc
 
-# now source the environment for the remainder of this script
-sudo -u "$username" source ~/install/sdr/setup_env.sh
-
 # download the uhd images
-sudo -u "$username" uhd_images_downloader
+sudo -u "$username" $TARGET_PATH/bin/uhd_images_downloader
 
