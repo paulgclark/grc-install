@@ -31,19 +31,19 @@ sudo -u "$username" source $TARGET_PATH/setup_env.sh
 # install custom blocks
 sudo apt -y install cmake
 sudo apt -y install swig
-cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
+sudo -u "$username" cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
 # run git clone as user so we don't have root owned files in the system
 sudo -u "$username" git clone https://github.com/paulgclark/gr-reveng
-cd gr-reveng
+sudo -u "$username" cd gr-reveng
 sudo -u "$username" mkdir build
-cd build
+sudo -u "$username" cd build
 sudo -u "$username" cmake ../ 
 sudo -u "$username" make
 sudo make install
 sudo ldconfig
 
 # installing Python code for use in some exercises
-cd "$SRC_PATH" # the class-specific Python code goes to same place
+sudo -u "$username" cd "$SRC_PATH" # the class-specific Python code goes to same place
 sudo -u "$username" git clone https://github.com/paulgclark/rf_utilities
 sudo -u "$username" echo "" >> ~/.bashrc
 sudo -u "$username" echo "################################" >> ~/.bashrc
@@ -56,5 +56,5 @@ sudo apt install -y vim
 sudo snap install pycharm-community --classic
 
 # run gnuradio-companion with FM radio loaded for test
-cd "$SCRIPT_PATH"
+sudo -u "$username" cd "$SCRIPT_PATH"
 sudo -u "$username" gnuradio-companion ../grc/uhd-test/fm_receiver_hardware_uhd_uk.grc
