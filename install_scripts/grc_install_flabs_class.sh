@@ -26,7 +26,7 @@ TARGET_PATH=$INSTALL_PATH/sdr
 username=$SUDO_USER
 
 # source the environment setup script created in the gnuradio install
-source $TARGET_PATH/setup_env.sh
+sudo -u "$username" source $TARGET_PATH/setup_env.sh
 
 # install custom blocks
 sudo apt -y install cmake
