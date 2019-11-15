@@ -49,7 +49,7 @@ sudo -u "$username" git clone https://github.com/paulgclark/rf_utilities
 sudo -u "$username" echo "" >> ~/.bashrc
 sudo -u "$username" echo "################################" >> ~/.bashrc
 sudo -u "$username" echo "# Custom code for gnuradio class" >> ~/.bashrc
-sudo -u "$username" echo "export PYTHONPATH=$PYTHONPATH:"SRC_PATH"/rf_utilities"  >> ~/.bashrc
+sudo -u "$username" echo "export PYTHONPATH=\$PYTHONPATH:$SRC_PATH/rf_utilities"  >> ~/.bashrc
 sudo -u "$username" echo "" >> ~/.bashrc
 
 # other useful stuff
