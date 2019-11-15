@@ -45,18 +45,18 @@ sudo -u "$username" mkdir -p $TARGET_PATH
 
 ############################## UHD
 # get the repo
-sudo -u "$username" cd $SRC_PATH
+cd $SRC_PATH
 sudo -u "$username" git clone --recursive https://github.com/EttusResearch/uhd
 
 # checkout the more recent stable release
-sudo -u "$username" cd $SRC_PATH/uhd
+cd $SRC_PATH/uhd
 sudo -u "$username" git checkout $UHD_VERSION
 sudo -u "$username" git submodule update
 
 # build UHD
-sudo -u "$username" cd $SRC_PATH/uhd/host
+cd $SRC_PATH/uhd/host
 sudo -u "$username" mkdir build
-sudo -u "$username" cd build
+cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=~/install/sdr ../
 sudo -u "$username" make -j3 # feel free to increase if you have more cores
 sudo -u "$username" make install
@@ -74,23 +74,23 @@ sudo sh -c "echo '@usrp\t-\trtprio\t99' >> /etc/security/limits.conf"
 
 ############################## GNURADIO
 # now build gnuradio from source
-sudo -u "$username" cd $SRC_PATH
+cd $SRC_PATH
 sudo -u "$username" git clone --recursive https://github.com/gnuradio/gnuradio
 
 # checkout the intended release
-sudo -u "$username" cd $SRC_PATH/gnuradio
+cd $SRC_PATH/gnuradio
 sudo -u "$username" git checkout $GRC_VERSION 
 sudo -u "$username" git submodule update
 
 # build gnuradio
 sudo -u "$username" mkdir build
-sudo -u "$username" cd build
+cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=~/install/sdr -DUHD_DIR=~/install/sdr/lib/cmake/uhd/ -DUHD_INCLUDE_DIRS=~/install/sdr/include/ -DUHD_LIBRARIES=~/install/sdr/lib/libuhd.so ../
 sudo -u "$username" make -j3
 sudo -u "$username" make install
 
 # create the environment file
-sudo -u "$username" cd $TARGET_PATH
+cd $TARGET_PATH
 sudo -u "$username" touch setup_env.sh
 
 sudo -u "$username" echo -e "LOCALPREFIX=$TARGET_PATH" >> setup_env.sh

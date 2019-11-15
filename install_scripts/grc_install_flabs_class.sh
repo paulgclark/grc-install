@@ -33,18 +33,18 @@ sudo -u "$username" bash $TARGET_PATH/setup_env.sh
 # install custom blocks
 sudo apt -y install cmake
 sudo apt -y install swig
-sudo -u "$username" cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
+cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
 # run git clone as user so we don't have root owned files in the system
 sudo -u "$username" git clone https://github.com/paulgclark/gr-reveng
-sudo -u "$username" cd gr-reveng
+cd gr-reveng
 sudo -u "$username" mkdir build
-sudo -u "$username" cd build
+cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../ 
 sudo -u "$username" make
 sudo -u "$username" make install
 
 # installing Python code for use in some exercises
-sudo -u "$username" cd "$SRC_PATH" # the class-specific Python code goes to same place
+cd "$SRC_PATH" # the class-specific Python code goes to same place
 sudo -u "$username" git clone https://github.com/paulgclark/rf_utilities
 sudo -u "$username" echo "" >> ~/.bashrc
 sudo -u "$username" echo "################################" >> ~/.bashrc
