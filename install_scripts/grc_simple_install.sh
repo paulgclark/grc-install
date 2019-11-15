@@ -1,4 +1,7 @@
 #!/bin/bash
+# This script will install gnuradio 3.7.11, applying a necessary patch.
+# It will also install the necessary files to get the USRP hardware
+# working. Finally, the gr-reveng OOT blocks are installed.
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
