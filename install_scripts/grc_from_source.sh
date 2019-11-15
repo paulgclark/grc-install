@@ -20,7 +20,7 @@ git clone --recursive https://github.com/EttusResearch/uhd
 
 # checkout the more recent stable release
 cd ~/install/src/uhd
-git checkout release $UHD_VERSION
+git checkout $UHD_VERSION
 git submodule update
 
 # build UHD
