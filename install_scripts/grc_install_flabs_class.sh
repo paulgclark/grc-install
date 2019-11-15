@@ -18,9 +18,11 @@
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
-INSTALL_PATH="~/install"
+cd ~/install
+INSTALL_PATH=`pwd`
 SRC_PATH=$INSTALL_PATH/src
 TARGET_PATH=$INSTALL_PATH/sdr
+cd $SCRIPT_PATH
 
 # get username
 username=$SUDO_USER
