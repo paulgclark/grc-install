@@ -18,9 +18,9 @@
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
-# get directory into which git project was cloned
-cd ../..
-INSTALL_PATH=`pwd`
+# get directory where the gnuradio and uhd source code lives
+cd ../../src
+SRC_PATH=`pwd`
 cd "$SCRIPT_PATH"
 
 # get username
@@ -29,7 +29,7 @@ username=$SUDO_USER
 # install custom blocks
 sudo apt -y install cmake
 sudo apt -y install swig
-cd "$INSTALL_PATH" # the custom block code will live at the same level as grc-install
+cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
 # run git clone as user so we don't have root owned files in the system
 sudo -u "$username" git clone https://github.com/paulgclark/gr-reveng
 cd gr-reveng
@@ -41,12 +41,12 @@ sudo make install
 sudo ldconfig
 
 # installing Python code for use in some exercises
-cd "$INSTALL_PATH" # the class-specific Python code will live at the same level as grc-install
+cd "$SRC_PATH" # the class-specific Python code goes to same place
 sudo -u "$username" git clone https://github.com/paulgclark/rf_utilities
 sudo -u "$username" echo "" >> ~/.bashrc
 sudo -u "$username" echo "################################" >> ~/.bashrc
 sudo -u "$username" echo "# Custom code for gnuradio class" >> ~/.bashrc
-sudo -u "$username" echo "export PYTHONPATH=$PYTHONPATH:"INSTALL_PATH"/rf_utilities"  >> ~/.bashrc
+sudo -u "$username" echo "export PYTHONPATH=$PYTHONPATH:"SRC_PATH"/rf_utilities"  >> ~/.bashrc
 sudo -u "$username" echo "" >> ~/.bashrc
 
 # other useful stuff
@@ -55,4 +55,4 @@ sudo snap install pycharm-community --classic
 
 # run gnuradio-companion with FM radio loaded for test
 cd "$SCRIPT_PATH"
-sudo -u "$username" gnuradio-companion ../grc/uhd-test/fm_receiver_hardware_uhd.grc
+sudo -u "$username" gnuradio-companion ../grc/uhd-test/fm_receiver_hardware_uhd_uk.grc
