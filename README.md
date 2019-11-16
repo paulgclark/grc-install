@@ -1,4 +1,4 @@
-# grc-install-files
+# grc-install
 This repo contains files for installing and testing gnuradio-companion
 with support for the UHD drivers. There are also a few additional
 scripts for installing other useful software.
@@ -39,7 +39,7 @@ sudo ./grc_from_source.sh
 ```
 This will take a while, probably 30-60 minutes. If you want to tinker with
 the script before running, you can bump up the number of cores used in the
-make step to match your multi-core monster system (should you have one). 
+make step to match your multi-core monster rig. 
 
 ## Testing The Build
 You will need to open a new terminal window. Then type:
@@ -70,6 +70,9 @@ the environment variable near the top of the script accordingly
 
 ./install_scripts/grc_simple_install.sh
 - a quicker and simpler script that installs 3.7.11 from the repository
+- this install is not to a target but is a global install
+- this script is a quick and dirty standalone and shouldn't be expected
+to work with any of the others here
 
 ./install_scripts/fosphor_install.sh
 - installs OpenCL and gr-fosphor from source to your target
@@ -81,9 +84,9 @@ the environment variable near the top of the script accordingly
 - you may find it useful even if you're not taking a class...
 
 ## Test Flowgraphs
-./grc/uhd-test
-./grc/hackrf-test
-./grc/lime-test
+./grc/uhd-test  
+./grc/hackrf-test  
+./grc/lime-test  
 
 The latter two won't be so useful until I restore the hackrf and limesdr
 installation scripts, but each of these directories has some flowgraphs
