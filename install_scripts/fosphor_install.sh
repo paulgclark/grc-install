@@ -29,6 +29,7 @@ cd $SCRIPT_PATH
 
 # install dependencies
 sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt4-default qtcreator python-qt4 swig wget
+#sudo apt -y install mesa-opencl-icd
 
 # install glfw
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
@@ -67,7 +68,7 @@ sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/downl
 sudo dpkg -i *.deb
 
 # final installation
-sudo apt install ocl-icd-opencl-dev
+sudo apt -y install ocl-icd-opencl-dev
 
 # now install gr-fosphor itself
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
