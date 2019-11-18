@@ -25,6 +25,9 @@ cd $SCRIPT_PATH
 # get username
 username=$SUDO_USER
 
+# number of cores to use for make
+CORES=3
+
 # if you want to install different versions of these, you can see a list of 
 # releases on github, or by running the following command after the recursive
 # clone operation:
@@ -58,7 +61,7 @@ cd $SRC_PATH/uhd/host
 sudo -u "$username" mkdir build
 cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=~/install/sdr ../
-sudo -u "$username" make -j3 # feel free to increase if you have more cores
+sudo -u "$username" make -j$CORES
 sudo -u "$username" make install
 
 # copy UHD rules file
@@ -86,7 +89,7 @@ sudo -u "$username" git submodule update
 sudo -u "$username" mkdir build
 cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=~/install/sdr -DUHD_DIR=~/install/sdr/lib/cmake/uhd/ -DUHD_INCLUDE_DIRS=~/install/sdr/include/ -DUHD_LIBRARIES=~/install/sdr/lib/libuhd.so ../
-sudo -u "$username" make -j3
+sudo -u "$username" make -j$CORES
 sudo -u "$username" make install
 
 # create the environment file
