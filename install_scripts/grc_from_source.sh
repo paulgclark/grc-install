@@ -121,4 +121,3 @@ sudo -u "$username" echo -e "export UHD_DIR=$TARGET_PATH" >> ~/.bashrc
 sudo -u "$username" echo -e "export UHD_LIBRARIES=$TARGET_PATH/lib" >> ~/.bashrc
 sudo -u "$username" echo -e "export UHD_INCLUDE_DIRS=$TARGET_PATH/include" >> ~/.bashrc
 
-
