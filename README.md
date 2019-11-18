@@ -48,8 +48,9 @@ cd install/grc-install/grc/uhd-test
 gnuradio-companion fm_receiver_hardware_uhd_3_7_13.grc
 ```
 If all has gone well, you should see the gnuradio-companion interface,
-pre-populated with a flowgraph. Attach your Ettus hardware to your
-computer via USB3 with an 100 MHz-capable antenna on your TRX port. You
+pre-populated with a flowgraph. Attach a 100 MHz-capable antenna to
+the TRX port of your Ettus hardware. Then connect the Ettus device to 
+your computer via USB3 (sometimes labeled SS or SuperSpeed). You
 can then run the flowgraph by clicking the execute button from the 
 toolbar. If all has gone well, you should see a Frequency plot. You can 
 tune to one of the spikes there by typing the corresponding frequency 
