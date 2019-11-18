@@ -62,24 +62,24 @@ require entering in the password throughout execution. I've used the -u
 option frequently to keep a bunch of root-owned files from messing up
 your file system.
 
-./install_scripts/grc_from_source.sh
+sudo ./install_scripts/grc_from_source.sh
 - installs gnuradio 3.7.13.5, the uhd drivers and other things required 
 to make them work
 - if you want a different version of either gnuradio or uhd, you can set 
 the environment variable near the top of the script accordingly
 
-./install_scripts/grc_simple_install.sh
+sudo ./install_scripts/grc_simple_install.sh
 - a quicker and simpler script that installs 3.7.11 from the repository
 - this install is not to a target but is a global install
 - this script is a quick and dirty standalone and shouldn't be expected
 to work with any of the others here
 
-./install_scripts/fosphor_install.sh
+sudo ./install_scripts/fosphor_install.sh
 - installs OpenCL and gr-fosphor from source to your target
 - this may or may not work depending on your hardware
 - I was successful on Intel machines with integrated graphics
 
-./install_scripts/grc_install_flabs_class.sh
+sudo ./install_scripts/grc_install_flabs_class.sh
 - contains additional software for those taking a Factoria Labs SDR class
 - you may find it useful even if you're not taking a class...
 
