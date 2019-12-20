@@ -24,7 +24,7 @@
 SCRIPT_PATH=$PWD
 
 # check if arg been passed for install path, else use ~/install
-if [ $1 != "" ]; then
+if [ "$1" != "" ]; then
 	INSTALL_PATH=$1
 else
 	cd ~/install
@@ -32,14 +32,14 @@ else
 fi
 
 # check if arg passed for target path, else use subdir of INSTALL_PATH
-if [ $2 != "" ]; then
+if [ "$2" != "" ]; then
 	TARGET_PATH=$2
 else
 	TARGET_PATH=$INSTALL_PATH/sdr
 fi
 
 # check if arg passed for source path, else use subdir of INSTALL_PATH
-if [ $3 != "" ]; then
+if [ "$3" != "" ]; then
 	SRC_PATH=$3
 else
 	SRC_PATH=$INSTALL_PATH/src
