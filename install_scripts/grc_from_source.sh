@@ -137,7 +137,7 @@ sudo -u "$username" echo -e "export UHD_LIBRARIES=$TARGET_PATH/lib" >> setup_env
 sudo -u "$username" echo -e "export UHD_INCLUDE_DIRS=$TARGET_PATH/include" >> setup_env.sh
 
 # add this environment setup script to bashrc unless it's already in there
-if grep -q "$TARGET_PATH/setup_env.sh"; then
+if grep -q "$TARGET_PATH/setup_env.sh" ~/.bashrc; then
 	:
 else
 	sudo -u "$username" echo -e "" >> ~/.bashrc
