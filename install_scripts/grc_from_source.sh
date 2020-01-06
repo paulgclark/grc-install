@@ -19,6 +19,13 @@
 # - target path
 # - source path
 
+# you should be running as root, if you are not, quit
+if [[ $EUID != 0 ]]; then
+        echo "You are attempting to run the script root without root privileges."
+        echo "Please run with sudo:"
+        echo "  sudo ./grc_from_source.sh"
+        exit 1
+fi
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
