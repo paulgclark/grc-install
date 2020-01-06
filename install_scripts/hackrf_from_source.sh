@@ -21,11 +21,6 @@ if [[ $EUID == 0 ]]; then
 	exit 1
 fi
 
-echo "Got here!"
-exit 0
-# get username
-username=$SUDO_USER
-
 # number of cores to use for make
 CORES=`nproc`
 
