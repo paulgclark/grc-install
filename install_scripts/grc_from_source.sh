@@ -90,7 +90,7 @@ sudo -u "$username" git submodule update
 
 # build UHD
 cd $SRC_PATH/uhd/host
-sudo -u "$username" mkdir build
+sudo -u "$username" mkdir -p build
 cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
 sudo -u "$username" make -j$CORES
@@ -118,7 +118,7 @@ sudo -u "$username" git checkout $GRC_VERSION
 sudo -u "$username" git submodule update
 
 # build gnuradio
-sudo -u "$username" mkdir build
+sudo -u "$username" mkdir -p build
 cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ -DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ -DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so ../
 sudo -u "$username" make -j$CORES
@@ -139,9 +139,12 @@ sudo -u "$username" echo -e "export UHD_RFNOC_DIR=\$LOCALPREFIX/share/uhd/rfnoc/
 sudo -u "$username" echo -e "export UHD_IMAGES_DIR=\$LOCALPREFIX/share/uhd/images" >> setup_env.sh
 sudo -u "$username" echo -e "" >> setup_env.sh
 sudo -u "$username" echo -e "########## for compiling software that depends on UHD" >> setup_env.sh
-sudo -u "$username" echo -e "export UHD_DIR=$TARGET_PATH" >> setup_env.sh
-sudo -u "$username" echo -e "export UHD_LIBRARIES=$TARGET_PATH/lib" >> setup_env.sh
-sudo -u "$username" echo -e "export UHD_INCLUDE_DIRS=$TARGET_PATH/include" >> setup_env.sh
+sudo -u "$username" echo -e "export UHD_DIR=\$LOCALPREFIX" >> setup_env.sh
+sudo -u "$username" echo -e "export UHD_LIBRARIES=\$LOCALPREFIX/lib" >> setup_env.sh
+sudo -u "$username" echo -e "export UHD_INCLUDE_DIRS=\$LOCALPREFIX/include" >> setup_env.sh
+sudo -u "$username" echo -e "" >> setup_env.sh
+sudo -u "$username" echo -e "export SDR_TARGET_DIR=\$LOCALPREFIX" >> setup_env.sh
+sudo -u "$username" echo -e "export SDR_SRC_DIR=$SRC_PATH" >> setup_env.sh
 
 # add this environment setup script to bashrc unless it's already in there
 if grep -q "$TARGET_PATH/setup_env.sh" ~/.bashrc; then
