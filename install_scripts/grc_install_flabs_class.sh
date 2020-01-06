@@ -37,7 +37,7 @@ cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
 # run git clone as user so we don't have root owned files in the system
 sudo -u "$username" git clone https://github.com/paulgclark/gr-reveng
 cd gr-reveng
-sudo -u "$username" mkdir build
+sudo -u "$username" mkdir -p build
 cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../ 
 sudo -u "$username" make

@@ -38,7 +38,7 @@ git submodule update
 
 # build it
 cd host
-mkdir build
+mkdir -p build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=$SDR_TARGET_DIR -DINSTALL_UDEV_RULES=Off ../
 make -j$CORES
@@ -55,7 +55,7 @@ git checkout $GR_OSMOSDR_VERSION
 git submodule update
 
 # build it
-mkdir build
+mkdir -p build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=$SDR_TARGET_DIR ../
 make -j$CORES

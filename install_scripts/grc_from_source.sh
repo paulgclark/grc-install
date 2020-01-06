@@ -90,7 +90,7 @@ sudo -u "$username" git submodule update
 
 # build UHD
 cd $SRC_PATH/uhd/host
-sudo -u "$username" mkdir build
+sudo -u "$username" mkdir -p build
 cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
 sudo -u "$username" make -j$CORES
@@ -118,7 +118,7 @@ sudo -u "$username" git checkout $GRC_VERSION
 sudo -u "$username" git submodule update
 
 # build gnuradio
-sudo -u "$username" mkdir build
+sudo -u "$username" mkdir -p build
 cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ -DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ -DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so ../
 sudo -u "$username" make -j$CORES
