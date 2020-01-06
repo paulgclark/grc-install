@@ -155,22 +155,6 @@ else
 	sudo -u "$username" echo -e "source $TARGET_PATH/setup_env.sh" >> ~/.bashrc
 fi
 
-# export the variables in the setup_env.sh so that users don't have to 
-# open a new window
-sudo -u "$username" export PATH=$TARGET_PATH/bin:\$PATH
-sudo -u "$username" export LD_LOAD_LIBRARY=$TARGET_PATH/lib:\$LD_LOAD_LIBRARY
-sudo -u "$username" export LD_LIBRARY_PATH=$TARGET_PATH/lib:\$LD_LIBRARY_PATH
-sudo -u "$username" export PYTHONPATH=$TARGET_PATH/lib/python2.7/site-packages:\$PYTHONPATH
-sudo -u "$username" export PYTHONPATH=$TARGET_PATH/lib/python2.7/dist-packages:\$PYTHONPATH
-sudo -u "$username" export PKG_CONFIG_PATH=$TARGET_PATH/lib/pkgconfig:\$PKG_CONFIG_PATH
-sudo -u "$username" export UHD_RFNOC_DIR=$TARGET_PATH/share/uhd/rfnoc/
-sudo -u "$username" export UHD_IMAGES_DIR=$TARGET_PATH/share/uhd/images
-sudo -u "$username" export UHD_DIR=$TARGET_PATH
-sudo -u "$username" export UHD_LIBRARIES=$TARGET_PATH/lib
-sudo -u "$username" export UHD_INCLUDE_DIRS=$TARGET_PATH/include
-sudo -u "$username" export SDR_TARGET_DIR=$TARGET_PATH
-sudo -u "$username" export SDR_SRC_DIR=$SRC_PATH
-
 
 # download the uhd images
 sudo -u "$username" $TARGET_PATH/bin/uhd_images_downloader
