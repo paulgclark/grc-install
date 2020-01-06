@@ -139,11 +139,11 @@ sudo -u "$username" echo -e "export UHD_RFNOC_DIR=\$LOCALPREFIX/share/uhd/rfnoc/
 sudo -u "$username" echo -e "export UHD_IMAGES_DIR=\$LOCALPREFIX/share/uhd/images" >> setup_env.sh
 sudo -u "$username" echo -e "" >> setup_env.sh
 sudo -u "$username" echo -e "########## for compiling software that depends on UHD" >> setup_env.sh
-sudo -u "$username" echo -e "export UHD_DIR=$TARGET_PATH" >> setup_env.sh
-sudo -u "$username" echo -e "export UHD_LIBRARIES=$TARGET_PATH/lib" >> setup_env.sh
-sudo -u "$username" echo -e "export UHD_INCLUDE_DIRS=$TARGET_PATH/include" >> setup_env.sh
+sudo -u "$username" echo -e "export UHD_DIR=\$LOCALPREFIX" >> setup_env.sh
+sudo -u "$username" echo -e "export UHD_LIBRARIES=\$LOCALPREFIX/lib" >> setup_env.sh
+sudo -u "$username" echo -e "export UHD_INCLUDE_DIRS=\$LOCALPREFIX/include" >> setup_env.sh
 sudo -u "$username" echo -e "" >> setup_env.sh
-sudo -u "$username" echo -e "export SDR_TARGET_DIR=$TARGET_PATH" >> setup_env.sh
+sudo -u "$username" echo -e "export SDR_TARGET_DIR=\$LOCALPREFIX" >> setup_env.sh
 sudo -u "$username" echo -e "export SDR_SRC_DIR=$SRC_PATH" >> setup_env.sh
 
 # add this environment setup script to bashrc unless it's already in there
@@ -157,11 +157,4 @@ fi
 
 # download the uhd images
 sudo -u "$username" $TARGET_PATH/bin/uhd_images_downloader
-
-# also add this environment setup script to bashrc
-#sudo -u "$username" echo -e "" >> ~/.bashrc
-#sudo -u "$username" echo -e "########## for compiling software that depends on UHD" >> ~/.bashrc
-#sudo -u "$username" echo -e "export UHD_DIR=$TARGET_PATH" >> ~/.bashrc
-#sudo -u "$username" echo -e "export UHD_LIBRARIES=$TARGET_PATH/lib" >> ~/.bashrc
-#sudo -u "$username" echo -e "export UHD_INCLUDE_DIRS=$TARGET_PATH/include" >> ~/.bashrc
 
