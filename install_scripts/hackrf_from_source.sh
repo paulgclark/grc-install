@@ -6,6 +6,8 @@
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
+cd ../udev-rules
+UDEV_RULES_PATH=$PWD
 
 # get username
 username=$SUDO_USER
@@ -29,7 +31,7 @@ sudo -u "$username" git submodule update
 cd host
 sudo -u "$username" mkdir build
 cd build
-sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$SDR_TARGET_DIR ../
+sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$SDR_TARGET_DIR -DINSTALL_UDEV_RULES=Off ../
 sudo -u "$username" make -j$CORES
 sudo -u "$username" make install
 
@@ -52,6 +54,6 @@ sudo -u "$username" make install
 
 
 # copy hackrf rules file
-sudo cp $SCRIPT_PATH/udev-rules/53-hackrf.rules /etc/udev/rules.d/
+sudo cp $UDEV_RULES_PATH/53-hackrf.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules
 
