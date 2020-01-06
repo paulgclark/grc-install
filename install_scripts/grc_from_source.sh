@@ -168,6 +168,8 @@ sudo -u "$username" export UHD_IMAGES_DIR=$TARGET_PATH/share/uhd/images
 sudo -u "$username" export UHD_DIR=$TARGET_PATH
 sudo -u "$username" export UHD_LIBRARIES=$TARGET_PATH/lib
 sudo -u "$username" export UHD_INCLUDE_DIRS=$TARGET_PATH/include
+sudo -u "$username" export SDR_TARGET_DIR=$TARGET_PATH
+sudo -u "$username" export SDR_SRC_DIR=$SRC_PATH
 
 
 # download the uhd images
