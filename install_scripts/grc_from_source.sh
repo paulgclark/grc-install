@@ -28,37 +28,6 @@ GRC_38_VERSION="v3.8.0.0"
 # git tag -l
 UHD_VERSION="v3.14.1.1"
 
-# you should be running as root; if you are not, quit
-if [[ $EUID != 0 ]]; then
-        echo "You are attempting to run the script root without root privileges."
-        echo "Please run with sudo:"
-        echo "  sudo ./grc_from_source.sh"
-        exit 1
-fi
-
-# determine if we are installing 3.7 or 3.8
-if [ "$1" != "" ]; then
-	GRC_38=false
-elif [ "$1" == "3.7" ]; then
-	GRC_38=false
-elif [ "$1" == "3.8" ]; then
-	GRC_38=true
-else
-	echo "Invalid GRC version. Please enter either \"3.7\" or \"3.8\""
-fi
-
-# check if arg been passed for install path, else use ~/install
-if [ "$2" != "" ]; then
-	INSTALL_PATH=$1
-else
-	cd ~/install
-	INSTALL_PATH=`pwd`
-fi
-
-# setup the target and source paths off the install directory
-TARGET_PATH=$INSTALL_PATH/sdr
-SRC_PATH=$INSTALL_PATH/src
-
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
 # get udev file directory
@@ -70,6 +39,39 @@ username=$SUDO_USER
 
 # number of cores to use for make
 CORES=`nproc`
+
+
+# you should be running as root; if you are not, quit
+if [[ $EUID != 0 ]]; then
+        echo "You are attempting to run the script root without root privileges."
+        echo "Please run with sudo:"
+        echo "  sudo ./grc_from_source.sh"
+        exit 1
+fi
+
+# determine if we are installing 3.7 (default) or 3.8
+if [ -z "$1" ]; then
+	GRC_38=false
+elif [ "$1" == "3.7" ]; then
+	GRC_38=false
+elif [ "$1" == "3.8" ]; then
+	GRC_38=true
+else
+	echo "Invalid GRC version. Please enter either \"3.7\" or \"3.8\""
+	exit 1
+fi
+
+# check if arg been passed for install path, else use ~/install
+if [ -z "$2" ]; then
+	cd ~/install
+	INSTALL_PATH=`pwd`
+else
+	INSTALL_PATH=$2
+fi
+
+# setup the target and source paths off the install directory
+TARGET_PATH=$INSTALL_PATH/sdr
+SRC_PATH=$INSTALL_PATH/src
 
 
 # install dependencies
