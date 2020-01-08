@@ -21,6 +21,21 @@ if [[ $EUID == 0 ]]; then
 	exit 1
 fi
 
+# there should also be an environment variable for the target and source paths
+# if there is not, quit
+if [[ -z "$SDR_TARGET_DIR" ]]; then
+        echo "ERROR: \$SDR_TARGET_DIR not defined."
+	echo "       You should run ./grc_from_source.sh before running this script."
+	echo "       If you've already done that, you may need to open a new terminal"
+	echo "       and try this script again."
+	exit 1
+if [[ -z "$SDR_SRC_DIR" ]]; then
+        echo "ERROR: \$SDR_SRC_DIR not defined."
+	echo "       You should run ./grc_from_source.sh before running this script."
+	echo "       If you've already done that, you may need to open a new terminal"
+	echo "       and try this script again."
+	exit 1
+
 # number of cores to use for make
 CORES=`nproc`
 
