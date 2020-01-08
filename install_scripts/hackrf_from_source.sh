@@ -62,7 +62,9 @@ make -j$CORES
 make install
 
 
-# copy hackrf rules file
-sudo cp $UDEV_RULES_PATH/53-hackrf.rules /etc/udev/rules.d/
-sudo udevadm control --reload-rules
+# copy hackrf rules file unless it's already there
+if [ ! -f /etc/udev/rules.d/53-hackrf.rules ]; then
+	sudo cp $UDEV_RULES_PATH/53-hackrf.rules /etc/udev/rules.d/
+	sudo udevadm control --reload-rules
+fi
 
