@@ -85,7 +85,7 @@ libsdl1.2-dev libgsl-dev libqwt-qt5-dev libqt5opengl5-dev python3-pyqt5 \
 liblog4cpp5-dev libzmq3-dev python3-yaml python3-click python3-click-plugins \
 python3-zmq 
 else # install the GRC 3.7 dependencies
-	sudo apt install cmake git g++ libboost-all-dev python-dev python-mako \
+	sudo apt -y install cmake git g++ libboost-all-dev python-dev python-mako \
 python-numpy python-wxgtk3.0 python-sphinx python-cheetah swig libzmq3-dev \
 libfftw3-dev libgsl-dev libcppunit-dev doxygen libcomedi-dev libqt4-opengl-dev \
 python-qt4 libqwt-dev libsdl1.2-dev libusb-1.0-0-dev python-gtk2 python-lxml \
@@ -93,7 +93,7 @@ pkg-config python-sip-dev
 fi
 
 # install UHD dependencies
-	sudo apt -y install build-essential libtool libusb-1.0-0 libusb-1.0-0-dev libudev-dev libncurses5-dev libfftw3-bin libfftw3-doc libcppunit-1.14-0 libcppunit-dev libcppunit-doc ncurses-bin cpufrequtils python-numpy python-numpy-doc python-numpy-dbg python-scipy python-docutils qt4-bin-dbg qt4-default qt4-doc libqt4-dev libqt4-dev-bin python-qt4 python-qt4-dbg python-qt4-dev python-qt4-doc libqwt6abi1 libncurses5 libncurses5-dbg libfontconfig1-dev libxrender-dev libpulse-dev g++ automake autoconf python-dev libusb-dev fort77 libsdl1.2-dev python-wxgtk3.0 ccache python-opengl libgsl-dev python-cheetah python-mako python-lxml qt4-dev-tools libqwtplot3d-qt5-dev pyqt4-dev-tools python-qwt5-qt4 wget libxi-dev gtk2-engines-pixbuf r-base-dev python-tk liborc-0.4-0 liborc-0.4-dev libasound2-dev python-gtk2 libzmq3-dev libzmq5 python-requests python-sphinx libcomedi-dev python-zmq libqwt-dev python-six libgps-dev libgps23 gpsd gpsd-clients python-gps python-setuptools libcanberra-gtk-module xterm
+sudo apt -y install build-essential libtool libusb-1.0-0 libusb-1.0-0-dev libudev-dev libncurses5-dev libfftw3-bin libfftw3-doc libcppunit-1.14-0 libcppunit-dev libcppunit-doc ncurses-bin cpufrequtils python-numpy python-numpy-doc python-numpy-dbg python-scipy python-docutils qt4-bin-dbg qt4-default qt4-doc libqt4-dev libqt4-dev-bin python-qt4 python-qt4-dbg python-qt4-dev python-qt4-doc libqwt6abi1 libncurses5 libncurses5-dbg libfontconfig1-dev libxrender-dev libpulse-dev g++ automake autoconf python-dev libusb-dev fort77 libsdl1.2-dev python-wxgtk3.0 ccache python-opengl libgsl-dev python-cheetah python-mako python-lxml qt4-dev-tools libqwtplot3d-qt5-dev pyqt4-dev-tools python-qwt5-qt4 wget libxi-dev gtk2-engines-pixbuf r-base-dev python-tk liborc-0.4-0 liborc-0.4-dev libasound2-dev python-gtk2 libzmq3-dev libzmq5 python-requests python-sphinx libcomedi-dev python-zmq libqwt-dev python-six libgps-dev libgps23 gpsd gpsd-clients python-gps python-setuptools libcanberra-gtk-module xterm
 
 # create source and target directories
 sudo -u "$username" mkdir -p $INSTALL_PATH
