@@ -43,7 +43,12 @@ fi
 CORES=`nproc`
 
 HACKRF_VERSION="v2018.01.1" # latest release
-GR_OSMOSDR_VERSION="v0.1.4"
+
+if [ "$GRC_38" = true ]; then
+	GR_OSMOSDR_VERSION="v0.1.5"
+else
+	GR_OSMOSDR_VERSION="v0.1.4"
+fi
 
 # get the repo and put it with the source from the grc install step
 cd $SDR_SRC_DIR
