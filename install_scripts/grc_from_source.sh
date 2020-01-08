@@ -78,7 +78,7 @@ SRC_PATH=$INSTALL_PATH/src
 sudo apt update
 sudo apt -y upgrade
 
-if [ $GRC_38 ]; then
+if [ "$GRC_38" = true ]; then
 	sudo apt -y install sudo apt install git cmake g++ libboost-all-dev libgmp-dev swig python3-numpy \
 python3-mako python3-sphinx python3-lxml doxygen libfftw3-dev libcomedi-dev \
 libsdl1.2-dev libgsl-dev libqwt-qt5-dev libqt5opengl5-dev python3-pyqt5 \
@@ -137,7 +137,7 @@ sudo -u "$username" git clone --recursive https://github.com/gnuradio/gnuradio
 
 # checkout the intended release
 cd $SRC_PATH/gnuradio
-if [ $GRC_38 ]; then
+if [ "$GRC_38" = true ]; then
 	sudo -u "$username" git checkout $GRC_38_VERSION
 else
 	sudo -u "$username" git checkout $GRC_37_VERSION
@@ -147,7 +147,7 @@ sudo -u "$username" git submodule update
 # build gnuradio
 sudo -u "$username" mkdir -p build
 cd build
-if [ $GRC_38 ]; then
+if [ "$GRC_38" = true ]; then
 	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ -DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ -DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so -DPYTHON_EXECUTABLE=/usr/bin/python3 ../
 else
 	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ -DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ -DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so ../
@@ -163,7 +163,7 @@ sudo -u "$username" echo -e "LOCALPREFIX=$TARGET_PATH" >> setup_env.sh
 sudo -u "$username" echo -e "export PATH=\$LOCALPREFIX/bin:\$PATH" >> setup_env.sh
 sudo -u "$username" echo -e "export LD_LOAD_LIBRARY=\$LOCALPREFIX/lib:\$LD_LOAD_LIBRARY" >> setup_env.sh
 sudo -u "$username" echo -e "export LD_LIBRARY_PATH=\$LOCALPREFIX/lib:\$LD_LIBRARY_PATH" >> setup_env.sh
-if [ $GRC_38 ]; then
+if [ "$GRC_38" = true ]; then
 	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3.6/site-packages:\$PYTHONPATH" >> setup_env.sh
 	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3.6/dist-packages:\$PYTHONPATH" >> setup_env.sh
 else
