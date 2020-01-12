@@ -111,11 +111,20 @@ cd $SCRIPT_PATH
 if [[ $GRC_38 == true ]]; then
 	# install QT5
 	sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt5-default swig wget
+	# use a fosphor version compatible with cmake 3.8
+	FOSPHOR_COMMIT=2d4fe78b43bb67907722f998feeb4534ecb1efa8
 else
+	# install QT4
 	sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt4-default \
 		qtcreator python-qt4 swig wget
+	# use a fosphor version compatible with cmake 2
+	FOSPHOR_COMMIT=5d8751ee411fb93ec8434dd2d6e7341988a91cb5
 fi
 #sudo apt -y install mesa-opencl-icd
+
+# after running the script, I also had to do the following with 3.8
+#sudo apt install beignet
+#sudo usermod -aG video $user_name
 
 # install glfw
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
@@ -131,15 +140,15 @@ sudo -u "$username" make
 sudo -u "$username" make install
 
 # install gmmlib (???? Aren't we getting this from the binaries?)
-cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
+#cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
 # run git clone as user so we don't have root owned files in the system
-sudo -u "$username" git clone https://github.com/intel/gmmlib
-cd gmmlib
-sudo -u "$username" mkdir -p build
-cd build
-sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DCMAKE_BUILD_TYPE=Release -DARCH=64 ../
-sudo -u "$username" make
-sudo -u "$username" make install
+#sudo -u "$username" git clone https://github.com/intel/gmmlib
+#cd gmmlib
+#sudo -u "$username" mkdir -p build
+#cd build
+#sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DCMAKE_BUILD_TYPE=Release -DARCH=64 ../
+#sudo -u "$username" make
+#sudo -u "$username" make install
 
 # install the five intel_deb packages (downloadable?)
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
@@ -161,33 +170,36 @@ if [ $install_beignet == true ]; then
 	sudo apt -y install cmake pkg-config python ocl-icd-dev libegl1-mesa-dev \
 		ocl-icd-opencl-dev libdrm-dev libxfixes-dev libxext-dev \
 	       	clang-3.6 libtinfo-dev libedit-dev zlib1g-dev
+	sudo apt install beignet
 	# removed llvm-3.6-dev and libclang-3.6-dev, not available via apt
 	# next install llvm and clang
-	sudo -u "$username" git clone --recursive https://github.com/llvm/llvm-project.git
-	cd llvm-project
-	sudo -u "$username" git checkout $LLVM_VERSION
-	sudo -u "$username" git submodule update
-	sudo -u "$username" mkdir -p build
-	cd build
-	sudo -u "$username" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../llvm
+	#sudo -u "$username" git clone --recursive https://github.com/llvm/llvm-project.git
+	#cd llvm-project
+	#sudo -u "$username" git checkout $LLVM_VERSION
+	#sudo -u "$username" git submodule update
+	#sudo -u "$username" mkdir -p build
+	#cd build
+	#sudo -u "$username" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../llvm
 	# also add -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi" ?
-	sudo -u "$username" make
-	sudo -u "$username" make install
+	#sudo -u "$username" make
+	#sudo -u "$username" make install
 fi
 
 # now install gr-fosphor itself
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
-sudo -u "$username" git clone git://git.osmocom.org/gr-fosphor
+sudo -u "$username" git clone --recursive git://git.osmocom.org/gr-fosphor
+cd gr-fosphor
+sudo -u "$username" git checkout $FOSPHOR_COMMIT
+sudo -u "$username" git submodule update
 
 # need to use sed/awk to modify the following file:
 # gr-fosphor/grc/fosphor_qt_sink_c.xml
 # $(gui_hint()($win))</make>  BECOMES $(gui_hint() % $win)</make>
-sed -i '/gui_hint()/ s/(\$win)/ % \$win/' gr-fosphor/grc/fosphor_qt_sink_c.xml
+sed -i '/gui_hint()/ s/(\$win)/ % \$win/' grc/fosphor_qt_sink_c.xml
 # gr-fosphor/lib/fosphor/private.h
 # #define FLG_FOSPHOR_USE_CLGL_SHARING    (1<<0)  BECOMES  #define FLG_FOSPHOR_USE_CLGL_SHARING    (0<<0)
-sed -i '/FLG_FOSPHOR_USE_CLGL_SHARING/ s/1<<0/0<<0/' gr-fosphor/lib/fosphor/private.h
+sed -i '/FLG_FOSPHOR_USE_CLGL_SHARING/ s/1<<0/0<<0/' lib/fosphor/private.h
 
-cd gr-fosphor
 sudo -u "$username" mkdir build
 cd build
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
