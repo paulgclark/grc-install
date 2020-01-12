@@ -207,4 +207,4 @@ sudo -u "$username" make
 sudo -u "$username" make install
 
 # may help
-sudo usermod -aG video "$user_name"
+sudo usermod -aG video "$username"
