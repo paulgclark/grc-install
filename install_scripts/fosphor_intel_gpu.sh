@@ -68,7 +68,6 @@ else
 	exit 1
 fi
 
-exit 0
 # number of cores to use for make
 CORES=`nproc`
 
