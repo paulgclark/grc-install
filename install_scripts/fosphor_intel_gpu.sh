@@ -170,7 +170,7 @@ if [ $install_beignet == true ]; then
 	sudo apt -y install cmake pkg-config python ocl-icd-dev libegl1-mesa-dev \
 		ocl-icd-opencl-dev libdrm-dev libxfixes-dev libxext-dev \
 	       	clang-3.6 libtinfo-dev libedit-dev zlib1g-dev
-	sudo apt install beignet
+	sudo apt -y install beignet
 	# removed llvm-3.6-dev and libclang-3.6-dev, not available via apt
 	# next install llvm and clang
 	#sudo -u "$username" git clone --recursive https://github.com/llvm/llvm-project.git
