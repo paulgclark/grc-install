@@ -112,13 +112,13 @@ if [[ $GRC_38 == true ]]; then
 	# install QT5
 	sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt5-default swig wget
 	# use a fosphor version compatible with cmake 3.8
-	FOSPHOR_COMMIT=2d4fe78b43bb67907722f998feeb4534ecb1efa8
+	FOSPHOR_REF="2d4fe78b43bb67907722f998feeb4534ecb1efa8"
 else
 	# install QT4
 	sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt4-default \
 		qtcreator python-qt4 swig wget
 	# use a fosphor version compatible with cmake 2
-	FOSPHOR_COMMIT=5d8751ee411fb93ec8434dd2d6e7341988a91cb5
+	FOSPHOR_REF="5d8751ee411fb93ec8434dd2d6e7341988a91cb5"
 fi
 #sudo apt -y install mesa-opencl-icd
 
@@ -189,7 +189,7 @@ fi
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
 sudo -u "$username" git clone --recursive git://git.osmocom.org/gr-fosphor
 cd gr-fosphor
-sudo -u "$username" git checkout $FOSPHOR_COMMIT
+sudo -u "$username" git checkout $FOSPHOR_REF
 sudo -u "$username" git submodule update
 
 # need to use sed/awk to modify the following file:
