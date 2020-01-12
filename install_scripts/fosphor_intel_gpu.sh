@@ -61,6 +61,8 @@ elif [[ $generation -ge 7 && $generation -le 9 ]]; then
 	echo "Got gen 7-9, installing ..."
 # a 10th generation part
 elif [[ $generation -eq 1 ]]; then
+	install_beignet=false
+	echo "Got gen 10, installing ..."
 else
 	echo "Couldn't identify processor generation"
 	exit 1
@@ -74,6 +76,7 @@ CORES=`nproc`
 # if there is not, quit
 if [[ -z "$SDR_TARGET_DIR" ]]; then
         echo "ERROR: \$SDR_TARGET_DIR not defined."
+	echo "       Please make sure you are running sudo -E ./fosphor_intel.sh"
         echo "       You should run ./grc_from_source.sh before running this script."
         echo "       If you've already done that, you may need to open a new terminal"
         echo "       and try this script again."
@@ -82,6 +85,7 @@ fi
 
 if [[ -z "$SDR_SRC_DIR" ]]; then
         echo "ERROR: \$SDR_SRC_DIR not defined."
+	echo "       Please make sure you are running sudo -E ./fosphor_intel.sh"
         echo "       You should run ./grc_from_source.sh before running this script."
         echo "       If you've already done that, you may need to open a new terminal"
         echo "       and try this script again."
@@ -90,6 +94,7 @@ fi
 
 if [[ -z "$GRC_38" ]]; then
         echo "ERROR: \$GRC_38 not defined."
+	echo "       Please make sure you are running sudo -E ./fosphor_intel.sh"
         echo "       You should run ./grc_from_source.sh before running this script."
         echo "       If you've already done that, you may need to open a new terminal"
         echo "       and try this script again."
@@ -106,7 +111,7 @@ cd $SCRIPT_PATH
 # install dependencies
 if [[ $GRC_38 == true ]]; then
 	# install QT5
-	sudo apt -y install cmake xort-dev libglu1-mesa-dev swig3.0 qt5-default swig wget
+	sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt5-default swig wget
 else
 	sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt4-default \
 		qtcreator python-qt4 swig wget
@@ -127,15 +132,15 @@ sudo -u "$username" make
 sudo -u "$username" make install
 
 # install gmmlib (???? Aren't we getting this from the binaries?)
-#cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
+cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
 # run git clone as user so we don't have root owned files in the system
-#sudo -u "$username" git clone https://github.com/intel/gmmlib
-#cd gmmlib
-#sudo -u "$username" mkdir -p build
-#cd build
-#sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DCMAKE_BUILD_TYPE=Release -DARCH=64 ../
-#sudo -u "$username" make
-#sudo -u "$username" make install
+sudo -u "$username" git clone https://github.com/intel/gmmlib
+cd gmmlib
+sudo -u "$username" mkdir -p build
+cd build
+sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DCMAKE_BUILD_TYPE=Release -DARCH=64 ../
+sudo -u "$username" make
+sudo -u "$username" make install
 
 # install the five intel_deb packages (downloadable?)
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
@@ -155,9 +160,10 @@ sudo apt -y install ocl-icd-opencl-dev
 if [ $install_beignet == true ]; then
 	# first install dependencies for beignet
 	sudo apt -y install cmake pkg-config python ocl-icd-dev libegl1-mesa-dev \
-		ocl-icd-opencl-dev libdrm-dev libxfixes-dev libxext-dev llvm-3.6-dev \
-	       	clang-3.6 libclang-3.6-dev libtinfo-dev libedit-dev zlib1g-dev
-	# next install llvm
+		ocl-icd-opencl-dev libdrm-dev libxfixes-dev libxext-dev \
+	       	clang-3.6 libtinfo-dev libedit-dev zlib1g-dev
+	# removed llvm-3.6-dev and libclang-3.6-dev, not available via apt
+	# next install llvm and clang
 	sudo -u "$username" git clone --recursive https://github.com/llvm/llvm-project.git
 	cd llvm-project
 	sudo -u "$username" git checkout $LLVM_VERSION
@@ -168,7 +174,7 @@ if [ $install_beignet == true ]; then
 	# also add -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi" ?
 	sudo -u "$username" make
 	sudo -u "$username" make install
-
+fi
 
 # now install gr-fosphor itself
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
@@ -189,3 +195,5 @@ sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
 sudo -u "$username" make
 sudo -u "$username" make install
 
+# may help
+sudo usermod -aG video "$user_name"
