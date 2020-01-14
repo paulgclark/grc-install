@@ -224,10 +224,11 @@ if [[ GRC_38 == false ]]; then
 	# gr-fosphor/grc/fosphor_qt_sink_c.xml
 	# $(gui_hint()($win))</make>  BECOMES $(gui_hint() % $win)</make>
 	sed -i '/gui_hint()/ s/(\$win)/ % \$win/' grc/fosphor_qt_sink_c.xml
-	# gr-fosphor/lib/fosphor/private.h
-	# #define FLG_FOSPHOR_USE_CLGL_SHARING    (1<<0)  BECOMES  #define FLG_FOSPHOR_USE_CLGL_SHARING    (0<<0)
-	sed -i '/FLG_FOSPHOR_USE_CLGL_SHARING/ s/1<<0/0<<0/' lib/fosphor/private.h
 fi
+
+# gr-fosphor/lib/fosphor/private.h
+# #define FLG_FOSPHOR_USE_CLGL_SHARING    (1<<0)  BECOMES  #define FLG_FOSPHOR_USE_CLGL_SHARING    (0<<0)
+sed -i '/FLG_FOSPHOR_USE_CLGL_SHARING/ s/1<<0/0<<0/' lib/fosphor/private.h
 
 sudo -u "$username" mkdir build
 cd build
