@@ -21,6 +21,26 @@ CPU_MFG="Intel"
 GLFW_VERSION="3.3.1"
 LLVM_VERSION="9.0.1"
 
+# this function clones and builds code from a cmake-style git repo
+function clone_and_build() {
+	git_repo_url=$1
+	release_commit=$2 # can be either a release or commit
+	cmake_args=$3     # in addition to the prefix build 
+
+	# check out a specific commit
+	sudo -u "$username" git clone --recursive $git_repo_url
+	cd `basename $git_repo_url`
+	sudo -u "$username" git checkout $release_commit
+	sudo -u "$username" git submodule update
+	# build it
+	sudo -u "$username" mkdir build
+	cd build
+	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
+	                          $cmake_args ../ 
+	sudo -u "$username" make
+	sudo -u "$username" make install
+}
+
 # get username
 username=$SUDO_USER
 
@@ -125,7 +145,7 @@ fi
 if [[ $GRC_38 == false ]] && [[ $BEIGNET == true ]]; then
 	echo "Sorry, this script will not work for older CPUs and GRC 3.7"
 	exit 1
-
+fi 
 #sudo apt -y install mesa-opencl-icd
 
 # install glfw
@@ -174,7 +194,7 @@ if [ $install_beignet == true ]; then
 	       	clang-3.6 libtinfo-dev libedit-dev zlib1g-dev
 	sudo apt -y install llvm-3.9-dev libclang-3.9-dev
 	sudo apt -y install beignet
-	# removed llvm-3.6-dev and libclang-3.6-dev, not available via apt
+
 	# next install llvm and clang
 	#sudo -u "$username" git clone --recursive https://github.com/llvm/llvm-project.git
 	#cd llvm-project
@@ -198,19 +218,21 @@ cd gr-fosphor
 sudo -u "$username" git checkout $FOSPHOR_REF
 sudo -u "$username" git submodule update
 
-# need to use sed/awk to modify the following file:
-# gr-fosphor/grc/fosphor_qt_sink_c.xml
-# $(gui_hint()($win))</make>  BECOMES $(gui_hint() % $win)</make>
-sed -i '/gui_hint()/ s/(\$win)/ % \$win/' grc/fosphor_qt_sink_c.xml
-# gr-fosphor/lib/fosphor/private.h
-# #define FLG_FOSPHOR_USE_CLGL_SHARING    (1<<0)  BECOMES  #define FLG_FOSPHOR_USE_CLGL_SHARING    (0<<0)
-sed -i '/FLG_FOSPHOR_USE_CLGL_SHARING/ s/1<<0/0<<0/' lib/fosphor/private.h
+# for gnuradio 3.7.x, we need to modify some XML files
+if [[ GRC_38 == false ]]; then
+	# need to use sed/awk to modify the following file:
+	# gr-fosphor/grc/fosphor_qt_sink_c.xml
+	# $(gui_hint()($win))</make>  BECOMES $(gui_hint() % $win)</make>
+	sed -i '/gui_hint()/ s/(\$win)/ % \$win/' grc/fosphor_qt_sink_c.xml
+	# gr-fosphor/lib/fosphor/private.h
+	# #define FLG_FOSPHOR_USE_CLGL_SHARING    (1<<0)  BECOMES  #define FLG_FOSPHOR_USE_CLGL_SHARING    (0<<0)
+	sed -i '/FLG_FOSPHOR_USE_CLGL_SHARING/ s/1<<0/0<<0/' lib/fosphor/private.h
+fi
 
 sudo -u "$username" mkdir build
 cd build
 #sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
-                          -DCMAKE_MODULE_PATH=$TARGET_PATH/lib/cmake/gnuradio 
                           -DCMAKE_BUILD_TYPE=RELEASE ../
 sudo -u "$username" make
 sudo -u "$username" make install
