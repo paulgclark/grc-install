@@ -45,7 +45,7 @@ make step to match your multi-core monster rig.
 You will need to open a new terminal window. Then type:
 ```
 cd install/grc-install/grc/uhd-test
-gnuradio-companion fm_receiver_hardware_uhd_3_7_13.grc
+gnuradio-companion fm_receiver_hardware_uhd.grc
 ```
 If all has gone well, you should see the gnuradio-companion interface,
 pre-populated with a flowgraph. Attach a 100 MHz-capable antenna to
@@ -75,10 +75,14 @@ sudo ./install_scripts/grc_simple_install.sh
 - this script is a quick and dirty standalone and shouldn't be expected
 to work with any of the others here
 
-sudo ./install_scripts/fosphor_install.sh
+./hackrf_from_source.sh
+- note that this runs without needing root privileges
+- installs hackrf tools as well as osmocom GRC blocks
+
+sudo -E ./install_scripts/fosphor_install.sh
 - installs OpenCL and gr-fosphor from source to your target
-- this may or may not work depending on your hardware
-- I was successful on Intel machines with integrated graphics
+- currently, this only works for gnuradio 3.8
+- currently, this only works on Intel machines with integrated graphics
 
 sudo ./install_scripts/grc_install_flabs_class.sh
 - contains additional software for those taking a Factoria Labs SDR class
@@ -87,9 +91,9 @@ sudo ./install_scripts/grc_install_flabs_class.sh
 ## Test Flowgraphs
 ./grc/uhd-test  
 ./grc/hackrf-test  
-./grc/lime-test  
+./grc/lime-test # this one not currently useful
 
-The latter two won't be so useful until I restore the hackrf and limesdr
-installation scripts, but each of these directories has some flowgraphs
+The lime-test won't be so useful until I restore the limesdr
+installation script, but each of these directories has some flowgraphs
 you can use to check that your system is running OK. The ook and gfsk
 flowgraphs require two sets of gnuradio-computer + sdr-hardware.
