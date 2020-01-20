@@ -20,6 +20,8 @@
 CPU_MFG="Intel"
 GLFW_VERSION="3.3.1"
 LLVM_VERSION="9.0.1"
+FOSPHOR_VER_38="2d4fe78b43bb67907722f998feeb4534ecb1efa8"
+FOSPHOR_VER_37="ffe4a1d7bdef4863e42fe70a7ed58f8c4d682ccd"
 
 # this function clones and builds code from a cmake-style git repo
 function clone_and_build() {
@@ -78,11 +80,11 @@ if [[ $generation -ge 3 && $generation -le 6 ]]; then
 # is it 7 or greater?
 elif [[ $generation -ge 7 && $generation -le 9 ]]; then
 	install_beignet=false
-	echo "Got gen 7-9, installing ..."
+	echo "Got gen 7-9, installing without beignet"
 # a 10th generation part
 elif [[ $generation -eq 1 ]]; then
 	install_beignet=false
-	echo "Got gen 10, installing ..."
+	echo "Got gen 10, installing without beignet"
 else
 	echo "Couldn't identify processor generation"
 	exit 1
@@ -132,21 +134,15 @@ if [[ $GRC_38 == true ]]; then
 	# install QT5
 	sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt5-default swig wget
 	# use a fosphor version compatible with cmake 3.8
-	FOSPHOR_REF="2d4fe78b43bb67907722f998feeb4534ecb1efa8"
+	FOSPHOR_REF=$FOSPHOR_VER_38
 else
 	# install QT4
 	sudo apt -y install cmake xorg-dev libglu1-mesa-dev swig3.0 qt4-default \
 		qtcreator python-qt4 swig wget
 	# use a fosphor version compatible with cmake 2
-	FOSPHOR_REF="5d8751ee411fb93ec8434dd2d6e7341988a91cb5"
+	FOSPHOR_REF=$FOSPHOR_VER_37
 fi
 
-# unfortunately, this flow doesn't work for older CPUs and gnuradio 3.7.x
-if [[ $GRC_38 == false ]] && [[ $BEIGNET == true ]]; then
-	echo "Sorry, this script will not work for older CPUs and GRC 3.7"
-	exit 1
-fi 
-#sudo apt -y install mesa-opencl-icd
 
 # install glfw
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
@@ -161,16 +157,6 @@ sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DBUILD_SHARED_LIB
 sudo -u "$username" make
 sudo -u "$username" make install
 
-# install gmmlib (???? Aren't we getting this from the binaries?)
-#cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
-# run git clone as user so we don't have root owned files in the system
-#sudo -u "$username" git clone https://github.com/intel/gmmlib
-#cd gmmlib
-#sudo -u "$username" mkdir -p build
-#cd build
-#sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DCMAKE_BUILD_TYPE=Release -DARCH=64 ../
-#sudo -u "$username" make
-#sudo -u "$username" make install
 
 # install the five intel_deb packages (downloadable?)
 cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
@@ -183,6 +169,7 @@ sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/downl
 sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/19.44.14658/intel-ocloc_19.44.14658_amd64.deb
 sudo dpkg -i *.deb
 
+
 # final installation
 sudo apt -y install ocl-icd-opencl-dev
 
@@ -194,21 +181,6 @@ if [ $install_beignet == true ]; then
 	       	clang-3.6 libtinfo-dev libedit-dev zlib1g-dev
 	sudo apt -y install llvm-3.9-dev libclang-3.9-dev
 	sudo apt -y install beignet
-
-	# next install llvm and clang
-	#sudo -u "$username" git clone --recursive https://github.com/llvm/llvm-project.git
-	#cd llvm-project
-	#sudo -u "$username" git checkout $LLVM_VERSION
-	#sudo -u "$username" git submodule update
-	#sudo -u "$username" mkdir -p build
-	#cd build
-	#sudo -u "$username" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../llvm
-	# also add -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi" ?
-	#sudo -u "$username" make
-	#sudo -u "$username" make install
-
-	# now install beignet from source
-	# 
 fi
 
 # now install gr-fosphor itself
@@ -218,7 +190,7 @@ cd gr-fosphor
 sudo -u "$username" git checkout $FOSPHOR_REF
 sudo -u "$username" git submodule update
 
-# for gnuradio 3.7.x, we need to modify some XML files
+# for gnuradio 3.7.x, we need to modify an XML file
 if [[ GRC_38 == false ]]; then
 	# need to use sed/awk to modify the following file:
 	# gr-fosphor/grc/fosphor_qt_sink_c.xml
@@ -232,7 +204,6 @@ sed -i '/FLG_FOSPHOR_USE_CLGL_SHARING/ s/1<<0/0<<0/' lib/fosphor/private.h
 
 sudo -u "$username" mkdir build
 cd build
-#sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
 sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
                           -DCMAKE_BUILD_TYPE=RELEASE ../
 sudo -u "$username" make
