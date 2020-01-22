@@ -59,7 +59,7 @@ if [ "$GRC_38" = true ]; then
 	# this specific commit has been tested and works
 	#GR_OSMOSDR_REF="???"
 	echo "No known code for gr-gsm that works with gnuradio 3.8"
-	echo "We recommend installing gnuradio3.8 to another prefix"
+	echo "We recommend installing gnuradio 3.7 to another prefix"
 	echo "and running this script on that installation."
 	exit 1
 else
