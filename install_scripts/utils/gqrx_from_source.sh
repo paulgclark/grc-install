@@ -13,7 +13,7 @@
 # cd grc-install/install-scripts/utils
 # sudo ./gqrx_from_source.sh
 #
-set -xv
+
 # These are the versions that will be installed for 3.7 and 3.8
 # If you want to install a different version, change these variables
 GQRX_VERSION="v2.11.5"
@@ -67,12 +67,12 @@ sudo apt -y install libqt5opengl5-dev libqt5svg5-dev qt5-default
 cd $SDR_SRC_DIR
 sudo -u "$username" git clone --recursive https://github.com/csete/gqrx
 
-# checkout the more recent stable release
+# checkout the most recent stable release
 cd $SDR_SRC_DIR/gqrx
 sudo -u "$username" git checkout $GQRX_VERSION
 sudo -u "$username" git submodule update
 
-# build UHD
+# build project
 sudo -u "$username" mkdir -p build
 cd build
 # assign the PREFIX value with the call to qmake
