@@ -84,8 +84,8 @@ pip3 install --user .
 SETUP_FILE=~/.local/qs_setup_env.sh
 touch $SETUP_FILE
 echo -e "# This file provides the setup information for qspectrumanalyzer" >> $SETUP_FILE
-echo -e "export PATH=$PATH:~/.local/bin" >> $SETUP_FILE
-echo -e "export PYTHONPATH=$PYTHONPATH:~/.local/lib/python3.6/site-packages" >> $SETUP_FILE
+echo -e "export PATH=\$PATH:~/.local/bin" >> $SETUP_FILE
+echo -e "export PYTHONPATH=\$PYTHONPATH:~/.local/lib/python3.6/site-packages" >> $SETUP_FILE
 
 
 # add this environment setup script to bashrc unless it's already in there
