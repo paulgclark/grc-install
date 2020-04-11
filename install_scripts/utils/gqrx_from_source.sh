@@ -27,6 +27,9 @@ username=$SUDO_USER
 # number of cores to use for make
 CORES=`nproc`
 
+# these are the versions of the code known to work for 3.7 and 3.8
+VERSION_38="v2.12.1"
+VERSION_37="v2.11.5"
 
 # you should be running as root; if you are not, quit
 if [[ $EUID != 0 ]]; then
@@ -56,6 +59,13 @@ if [[ -z "$SDR_SRC_DIR" ]]; then
         exit 1
 fi
 
+# select the version of the code based on which gnuradio is installed
+if [ "$GRC_38" = true ]; then
+        GIT_REF="$VERSION_38"
+else
+        GIT_REF="$VERSION_37"
+fi
+
 # install dependencies
 sudo apt update
 sudo apt -y upgrade
@@ -69,7 +79,7 @@ sudo -u "$username" git clone --recursive https://github.com/csete/gqrx
 
 # checkout the most recent stable release
 cd $SDR_SRC_DIR/gqrx
-sudo -u "$username" git checkout $GQRX_VERSION
+sudo -u "$username" git checkout $GIT_REF
 sudo -u "$username" git submodule update
 
 # build project
