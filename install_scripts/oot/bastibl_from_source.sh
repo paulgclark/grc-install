@@ -106,7 +106,7 @@ SETUP_FILE=$SCRIPT_PATH/bastibl_setup_env.sh
 rm $SETUP_FILE
 touch $SETUP_FILE
 echo -e "# This file handles setup bastible modules" >> $SETUP_FILE
-echo -e "sudo sysctl -w kernel.shmmax=2147483648"
+echo -e "sudo sysctl -w kernel.shmmax=2147483648" >> $SETUP_FILE
 
 # add this environment setup script to bashrc unless it's already in there
 # I'm adding it commented out to negate any impact to your system, please
