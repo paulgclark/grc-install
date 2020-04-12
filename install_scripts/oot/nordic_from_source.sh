@@ -10,12 +10,13 @@
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
+SCRIPT_NAME=${0##*/}
 
 # you should not be root, if you are, quit
 if [[ $EUID == 0 ]]; then
 	echo "You are attempting to run the script as root."
 	echo "Please do not run with sudo, but simply run:"
-	echo "  ./nordic_from_source"
+	echo "  ./$SCRIPT_NAME"
 	exit 1
 fi
 
@@ -43,7 +44,6 @@ CORES=`nproc`
 REF_VERSION_37="5c468607118e2857d6920708618860ba1a9ea532" # latest tested release
 
 # prereq
-pip install --user bitstring
 
 # get a know working version or commit
 if [ "$GRC_38" = true ]; then
@@ -52,6 +52,7 @@ if [ "$GRC_38" = true ]; then
 
 	# this specific commit has been tested and works
 	#GIT_INSTALL_REF="???"
+	#pip3 install --user bitstring
 	echo "No known code for gr-nordic that works with gnuradio 3.8"
 	echo "We recommend installing gnuradio 3.7 to another prefix"
 	echo "and running this script on that installation."
@@ -59,6 +60,7 @@ if [ "$GRC_38" = true ]; then
 else
 	GIT_INSTALL_REPO="https://github.com/BastilleResearch/gr-nordic"
 	GIT_INSTALL_REF="$REF_VERSION_37"
+	pip install --user bitstring
 fi
 
 # now get and build the code for gr-osmosdr

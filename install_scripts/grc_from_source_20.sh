@@ -99,11 +99,11 @@ if [ "$GRC_38" = true ]; then
 		python3-sphinx python3-lxml libqwt-qt5-dev \
 		libqt5opengl5-dev python3-pyqt5 liblog4cpp5-dev \
 		python3-yaml python3-click python3-click-plugins python3-zmq \
-		python3-setuptools python3-opengl
+		python3-setuptools python3-opengl python3-pip
 else # install the GRC 3.7 dependencies
 	sudo apt -y install python-dev python-mako \
 		python-numpy python-wxgtk3.0 python-sphinx python-cheetah \
-		swig libqt4-opengl-dev python-qt4 libqwt-dev \
+		swig libqt4-opengl-dev python-qt4 libqwt-dev python-pip \
 		python-gtk2 python-lxml pkg-config python-sip-dev \
 		python-opengl python-tk python-requests python-six python-gps
 fi

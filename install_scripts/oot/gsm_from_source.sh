@@ -10,12 +10,13 @@
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
+SCRIPT_NAME=${0##*/}
 
 # you should not be root, if you are, quit
 if [[ $EUID == 0 ]]; then
 	echo "You are attempting to run the script as root."
 	echo "Please do not run with sudo, but simply run:"
-	echo "  ./hackrf_from_source"
+	echo "  ./$SCRIPT_NAME"
 	exit 1
 fi
 

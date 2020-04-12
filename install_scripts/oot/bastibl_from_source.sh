@@ -21,8 +21,6 @@ if [[ $EUID != 0 ]]; then
 	exit 1
 fi
 
-set -x
-
 # there should also be an environment variable for the target and source paths
 # if there is not, quit
 if [[ -z "$SDR_TARGET_DIR" ]]; then
