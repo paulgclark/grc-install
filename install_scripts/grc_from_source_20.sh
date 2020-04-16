@@ -105,6 +105,15 @@ sudo apt -y install libzmq3-dev libzmq5
 sudo apt -y install libcomedi-dev
 sudo apt -y install libgps-dev gpsd gpsd-clients
 
+# dependencies for other packages, could be removed for gnuradio-only installs
+if [ $ubuntu_version == "20" ]; then
+	sudo apt -y install libwxgtk3.0-gtk3-dev
+else
+	sudo apt -y install libwxgtk3.0-dev
+fi
+sudo apt -y install gnuplot
+sudo apt -y install libfltk1.3-dev
+
 if [ "$GRC_38" = true ]; then
 	sudo apt -y install libgmp-dev swig python3-numpy python3-mako \
 		python3-sphinx python3-lxml libqwt-qt5-dev \
