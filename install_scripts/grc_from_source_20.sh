@@ -18,6 +18,9 @@
 # - gnuradio version ("3.7" or "3.8")
 # - install path
 
+# pull in functions from common file
+source ./common/common_functions.sh
+
 # These are the versions that will be installed for 3.7 and 3.8
 # If you want to install a different version, change these variables
 GRC_37_VERSION="v3.7.13.5"
@@ -38,6 +41,9 @@ UDEV_FILES_PATH=$PWD
 username=$SUDO_USER
 homedir="/home/$username" 
 
+# get ubuntu version
+get_ubuntu_version # returns value in variable: ubuntu_version
+
 # number of cores to use for make
 CORES=`nproc`
 
@@ -49,11 +55,16 @@ if [[ $EUID != 0 ]]; then
         exit 1
 fi
 
-# determine if we are installing 3.7 (default) or 3.8
+# determine if we are installing 3.8 (default) or 3.7
 if [ -z "$1" ]; then
-	GRC_38=false
+	GRC_38=true
 elif [ "$1" == "3.7" ]; then
-	GRC_38=false
+	if [ $ubuntu_version == "20" ]; then
+		echo "Cannot install gnuradio 3.7 on an Ubuntu 20 system"
+		exit 1
+	else
+		GRC_38=false
+	fi
 elif [ "$1" == "3.8" ]; then
 	GRC_38=true
 else
