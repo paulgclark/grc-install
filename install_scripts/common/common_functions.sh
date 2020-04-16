@@ -51,5 +51,6 @@ function get_ubuntu_version() {
 		ubuntu_version=${BASH_REMATCH[1]}
 		if [[ $ubuntu_version == "Focal" ]]; then
 			ubuntu_version="20"
+		fi
 	fi
 }
