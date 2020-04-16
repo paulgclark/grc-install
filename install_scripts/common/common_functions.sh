@@ -42,12 +42,14 @@ function clone_and_build() {
 # return the ubuntu version number
 function get_ubuntu_version() {
 	ubuntu_version_str=`hostnamectl | grep -i Ubuntu`
-	regex_str='Ubuntu\s+([0-9]+)\.'
+	regex_str='Ubuntu\s+([A-Za-z0-9]+)'
 	if [[ ! "$ubuntu_version_str" =~ $regex_str ]]; then
 		echo "ERROR: Not running Ubuntu. Install scripts will require"
 		echo "       manual edits to run. Proceed at your own risk."
 		exit 1
 	else
 		ubuntu_version=${BASH_REMATCH[1]}
+		if [[ $ubuntu_version == "Focal" ]]; then
+			ubuntu_version="20"
 	fi
 }
