@@ -17,6 +17,9 @@ SCRIPT_NAME=${0##*/}
 cd ../udev-rules
 UDEV_RULES_PATH=$PWD
 
+# get username
+username=$SUDO_USER
+
 # you should be running as root; if you are not, quit
 if [[ $EUID != 0 ]]; then
         echo "You are attempting to run the script without root privileges."
