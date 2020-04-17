@@ -16,7 +16,7 @@ SCRIPT_PATH=$PWD
 SCRIPT_NAME=${0##*/}
 cd ../udev-rules
 UDEV_RULES_PATH=$PWD
-set -x
+
 # you should not be root, if you are, quit
 if [[ $EUID == 0 ]]; then
 	echo "You are attempting to run the script as root."

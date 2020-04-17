@@ -1,14 +1,14 @@
 #!/bin/bash
-# This script installs the rtl-sdr tools from source. It is intended for
+# This script installs the adalm-pluto tools from source. It is intended for
 # execution AFTER the grc_from_source.sh script has been run and will
 # install to the same target directory used for that process.
 #
 # This script depends on environment variables that were created during
 # the gnuradio installation process, so the script must be run WITHOUT
 # sudo:
-# ./rtl_from_source
+# ./pluto_from_source
 
-# first get a common function
+# common function code
 source ./common/common_functions.sh
 
 # get current directory (assuming the script is run from local dir)
@@ -17,12 +17,12 @@ SCRIPT_NAME=${0##*/}
 cd ../udev-rules
 UDEV_RULES_PATH=$PWD
 
-# you should not be root, if you are, quit
-if [[ $EUID == 0 ]]; then
-	echo "You are attempting to run the script as root."
-	echo "Please do not run with sudo, but simply run:"
-	echo "  ./$SCRIPT_NAME"
-	exit 1
+# you should be running as root; if you are not, quit
+if [[ $EUID != 0 ]]; then
+        echo "You are attempting to run the script without root privileges."
+        echo "Please run with sudo:"
+        echo "  sudo -E ./$SCRIPT_NAME"
+        exit 1
 fi
 
 # there should also be an environment variable for the target and source paths
@@ -46,31 +46,43 @@ fi
 # number of cores to use for make
 CORES=`nproc`
 
-RTL_REPO_URL="https://github.com/osmocom/rtl-sdr"
+LIBIIO_REPO="https://github.com/analogdevicesinc/libiio"
+LIB9361_REPO="https://github.com/analogdevicesinc/libad9361-iio"
+GR_IIO_REPO="https://github.com/analogdevicesinc/gr-iio"
+LIBIIO_REF="master"
+LIB9361_REF="master"
 
-# get a know working version or commit
 if [ "$GRC_38" = true ]; then
-	RTL_GIT_REF="master"
-	GR_OSMOSDR_REPO_URL="https://github.com/igorauad/gr-osmosdr"
-	GR_OSMOSDR_GIT_REF="f3905d3510dfb3851f946f097a9e2ddaa5fb333b"
+	GR_IIO_REF="upgrade-3.8"
 else
-	RTL_GIT_REF="0.6.0"
-	GR_OSMOSDR_REPO_URL="https://github.com/osmocom/gr-osmosdr"
-	GR_OSMOSDR_GIT_REF="v0.1.4"
+	GR_IIO_REF="master"
 fi
 
+# dependencies
+sudo apt -y install libxml2
+sudo apt -y install libxml2-dev # need this
+sudo apt -y install libaio-dev # need this
+sudo apt -y install libboost-all-dev
+sudo apt -y install bison
+sudo apt -y install flex
+sudo apt -y install swig
 
-# get and build the code for rtl-sdr
+# build (or rebuild) libiio
 cd $SDR_SRC_DIR
-clone_and_build $RTL_REPO_URL $RTL_GIT_REF user "-DDETACH_KERNEL_DRIVER=ON"
+clone_and_build $LIBIIO_REPO $LIBIIO_REF sudo "-DINSTALL_UDEV_RULE=OFF"
 
-# build (or rebuild) gr-osmocom
+# build (or rebuild) libiio
 cd $SDR_SRC_DIR
-clone_and_build $GR_OSMOSDR_REPO_URL $GR_OSMOSDR_GIT_REF user
+clone_and_build $LIB9361_REPO $LIB9361_REF
+
+# build (or rebuild) libiio
+cd $SDR_SRC_DIR
+clone_and_build $GR_IIO_REPO $GR_IIO_REF
+
 
 # copy hackrf rules file unless it's already there
-if [ ! -f /etc/udev/rules.d/20-rtlsdr.rules ]; then
-	sudo cp $UDEV_RULES_PATH/20-rtlsdr.rules /etc/udev/rules.d/
+if [ ! -f /etc/udev/rules.d/53-adi-plutosdr-usb.rules ]; then
+	sudo cp $UDEV_RULES_PATH/53-adi-plutosdr-usb.rules /etc/udev/rules.d/
 	sudo udevadm control --reload-rules
 fi
 
