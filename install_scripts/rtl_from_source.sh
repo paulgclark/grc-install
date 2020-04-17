@@ -46,21 +46,27 @@ fi
 # number of cores to use for make
 CORES=`nproc`
 
-REPO_URL="https://github.com/osmocom/rtl-sdr"
+RTL_REPO_URL="https://github.com/osmocom/rtl-sdr"
 
 # get a know working version or commit
 if [ "$GRC_38" = true ]; then
-	GIT_REF="" #
-	echo "rtl-sder not yet supported by these scripts on gnuradio 3.8"
-	exit 1
+	RTL_GIT_REF="master"
+	GR_OSMOSDR_REPO_URL="https://github.com/igorauad/gr-osmosdr"
+	GR_OSMOSDR_GIT_REF="f3905d3510dfb3851f946f097a9e2ddaa5fb333b"
 else
-	GIT_REF="0.6.0"
+	RTL_GIT_REF="0.6.0"
+	GR_OSMOSDR_REPO_URL="https://github.com/osmocom/gr-osmosdr"
+	GR_OSMOSDR_GIT_REF="v0.1.4"
 fi
 
 
-# get and build the code for gr-rds
+# get and build the code for rtl-sdr
 cd $SDR_SRC_DIR
-clone_and_build $REPO_URL $GIT_REF user "-DDETACH_KERNEL_DRIVER=ON"
+clone_and_build $RTL_REPO_URL $RTL_GIT_REF user "-DDETACH_KERNEL_DRIVER=ON"
+
+# build (or rebuild) gr-osmocom
+cd $SDR_SRC_DIR
+clone_and_build $GR_OSMOSDR_REPO_URL $GR_OSMOSDR_GIT_REF user
 
 # copy hackrf rules file unless it's already there
 if [ ! -f /etc/udev/rules.d/20-rtlsdr.rules ]; then
