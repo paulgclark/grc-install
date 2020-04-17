@@ -72,6 +72,9 @@ if [ "" == "$PKG_OK" ]; then
 	sudo chmod 750 /usr/bin/dumpcap
 	sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap
 	sudo getcap /usr/bin/dumpcap
+	# because we setup wireshark in silent mode, we didn't get to select 
+	# "yes" in the GUI when asked if users should be able to capture
+	sudo setfacl -m u:$username:x /usr/bin/dumpcap
 else
 	echo "Wireshark already installed. Skipping installation."
 	echo "Note, if you previously installed this yourself, please"

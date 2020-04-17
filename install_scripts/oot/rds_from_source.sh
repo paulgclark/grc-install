@@ -65,13 +65,17 @@ sudo apt update
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' wireshark |grep "install ok installed")
 if [ "" == "$PKG_OK" ]; then
   	echo "No wireshark installed, doing so now."
-	sudo apt -y install wireshark
+	sudo DEBIAN_FRONTEND=noninteractive apt -y install wireshark
 	sudo groupadd wireshark
 	sudo usermod -a -G wireshark $username
 	sudo chgrp wireshark /usr/bin/dumpcap
 	sudo chmod 750 /usr/bin/dumpcap
 	sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/dumpcap
 	sudo getcap /usr/bin/dumpcap
+	# because we setup wireshark in silent mode, we didn't get to select 
+	# "yes" in the GUI when asked if users should be able to capture
+        sudo setfacl -m u:$username:x /usr/bin/dumpcap
+
 else
 	echo "Wireshark already installed. Skipping installation."
 	echo "Note, if you previously installed this yourself, please"
