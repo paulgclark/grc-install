@@ -65,7 +65,7 @@ sudo apt update
 PKG_OK=$(dpkg-query -W --showformat='${Status}\n' wireshark |grep "install ok installed")
 if [ "" == "$PKG_OK" ]; then
   	echo "No wireshark installed, doing so now."
-	sudo apt -y install wireshark
+	sudo DEBIAN_FRONTEND=noninteractive apt -y install wireshark
 	sudo groupadd wireshark
 	sudo usermod -a -G wireshark $username
 	sudo chgrp wireshark /usr/bin/dumpcap
