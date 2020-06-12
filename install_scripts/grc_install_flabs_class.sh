@@ -16,40 +16,71 @@
 # If you run this script from another directory, you will break some
 # relative path links and the install will fail.
 
+# get current path and script name
+SCRIPT_PATH=$PWD
+SCRIPT_NAME=${0##*/}
+
+# you should be root, if you are not, quit
+if [[ $EUID != 0 ]]; then
+        echo "You are attempting to run the script as user."
+        echo "Please run with sudo:"
+        echo "  sudo -E ./$SCRIPT_NAME"
+        exit 1
+fi
+
+# there should also be an environment variable for the target and source paths
+# if there is not, quit
+if [[ -z "$SDR_TARGET_DIR" ]]; then
+        echo "ERROR: \$SDR_TARGET_DIR not defined."
+        echo "       You should run ./grc_from_source.sh before running this script."
+        echo "       If you've already done that, you may need to open a new terminal"
+        echo "       and try this script again."
+        exit 1
+fi
+
+if [[ -z "$SDR_SRC_DIR" ]]; then
+        echo "ERROR: \$SDR_SRC_DIR not defined."
+        echo "       You should run ./grc_from_source.sh before running this script."
+        echo "       If you've already done that, you may need to open a new terminal"
+        echo "       and try this script again."
+        exit 1
+fi
+
 # get username
 username=$SUDO_USER
+# number of cores to use for make
+CORES=`nproc`
+# get general functions from the common file
+source ./common/common_functions.sh
 
-# get current directory (assuming the script is run from local dir)
-SCRIPT_PATH=$PWD
-cd ~/install
-INSTALL_PATH=`pwd`
-SRC_PATH=$INSTALL_PATH/src
-TARGET_PATH=$INSTALL_PATH/sdr
-cd $SCRIPT_PATH
+VERSION_38="master"
+VERSION_37="maint-3.7"
+REPO_URL="https://github.com/paulgclark/gr-reveng"
 
-# execute the environment setup script created in the gnuradio install
-sudo -u "$username" bash $TARGET_PATH/setup_env.sh
+# select the version of the code based on which gnuradio is installed
+if [ "$GRC_38" = true ]; then
+        GIT_REF="$VERSION_38"
+else
+        GIT_REF="$VERSION_37"
+fi
+
 
 # install custom blocks
 sudo apt -y install cmake
 sudo apt -y install swig
-cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
-# run git clone as user so we don't have root owned files in the system
-sudo -u "$username" git clone https://github.com/paulgclark/gr-reveng
-cd gr-reveng
-sudo -u "$username" mkdir -p build
-cd build
-sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../ 
-sudo -u "$username" make
-sudo -u "$username" make install
+
+# get and build the code for gr-rds
+cd $SDR_SRC_DIR
+clone_and_build $REPO_URL $GIT_REF
+
 
 # installing Python code for use in some exercises
-cd "$SRC_PATH" # the class-specific Python code goes to same place
-sudo -u "$username" git clone https://github.com/paulgclark/rf_utilities
+cd "$SDR_SRC_DIR" # the class-specific Python code goes to same place
+sudo -u "$username" git clone https://github.com/paulgclark/flabs_utils
 sudo -u "$username" echo "" >> ~/.bashrc
 sudo -u "$username" echo "################################" >> ~/.bashrc
 sudo -u "$username" echo "# Custom code for gnuradio class" >> ~/.bashrc
-sudo -u "$username" echo "export PYTHONPATH=\$PYTHONPATH:$SRC_PATH/rf_utilities"  >> ~/.bashrc
+sudo -u "$username" echo "export PYTHONPATH=\$PYTHONPATH:$SDR_SRC_DIR/flabs_utils/flabs_utils"  >> ~/.bashrc
 sudo -u "$username" echo "" >> ~/.bashrc
 
 # other useful stuff
