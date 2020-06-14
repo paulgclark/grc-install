@@ -238,3 +238,9 @@ fi
 # download the uhd images
 sudo -u "$username" $TARGET_PATH/bin/uhd_images_downloader
 
+
+# unzip the file used for the FM test flowgraph
+cd $SCRIPT_PATH
+cd ../grc
+sudo -u "$username" gunzip fm_c96M_s8M.iq.gz
+
