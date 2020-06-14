@@ -4,9 +4,9 @@
 # install to the same target directory used for that process.
 #
 # This script depends on environment variables that were created during
-# the gnuradio installation process, so the script must be run WITHOUT
-# sudo:
-# ./gsm_from_source
+# the gnuradio installation process, so the script must be run with the
+# -E option for sudo:
+# sudo -E ./bastibl_from_source.sh
 #
 # Thanks to Dr. Bloessel for creating and releasing this code!
 
@@ -17,7 +17,7 @@ SCRIPT_PATH=$PWD
 if [[ $EUID != 0 ]]; then
 	echo "You are attempting to run the script as user."
 	echo "Please run with sudo:"
-	echo "  sudo -E ./bastibl_from_source"
+	echo "  sudo -E ./bastibl_from_source.sh"
 	exit 1
 fi
 

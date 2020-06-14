@@ -15,18 +15,21 @@
 # sudo ./grc_from_source.sh
 #
 # Optionally, you can pass arguments for custom values for the following:
-# - gnuradio version (3.7 or 3.8)
+# - gnuradio version ("3.7" or "3.8")
 # - install path
+
+# pull in functions from common file
+source ./common/common_functions.sh
 
 # These are the versions that will be installed for 3.7 and 3.8
 # If you want to install a different version, change these variables
 GRC_37_VERSION="v3.7.13.5"
-GRC_38_VERSION="v3.8.0.0"
+GRC_38_VERSION="v3.8.1.0"
 # If you want to install different versions of uhd, you can see a list of 
 # releases on github, or by running the following command after the recursive
 # clone operation:
 # git tag -l
-UHD_VERSION="v3.14.1.1"
+UHD_VERSION="v3.15.0.0"
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
@@ -34,26 +37,34 @@ SCRIPT_PATH=$PWD
 cd ../udev-rules
 UDEV_FILES_PATH=$PWD
 
-# get username
+# get username and home dir (~ is causing problems without -E now)
 username=$SUDO_USER
+homedir="/home/$username" 
+
+# get ubuntu version
+get_ubuntu_version # returns value in variable: ubuntu_version
 
 # number of cores to use for make
 CORES=`nproc`
 
-
 # you should be running as root; if you are not, quit
 if [[ $EUID != 0 ]]; then
-        echo "You are attempting to run the script root without root privileges."
+        echo "You are attempting to run the script without root privileges."
         echo "Please run with sudo:"
         echo "  sudo ./grc_from_source.sh"
         exit 1
 fi
 
-# determine if we are installing 3.7 (default) or 3.8
+# determine if we are installing 3.8 (default) or 3.7
 if [ -z "$1" ]; then
-	GRC_38=false
+	GRC_38=true
 elif [ "$1" == "3.7" ]; then
-	GRC_38=false
+	if [ $ubuntu_version == "20" ]; then
+		echo "Cannot install gnuradio 3.7 on an Ubuntu 20 system"
+		exit 1
+	else
+		GRC_38=false
+	fi
 elif [ "$1" == "3.8" ]; then
 	GRC_38=true
 else
@@ -63,8 +74,7 @@ fi
 
 # check if arg been passed for install path, else use ~/install
 if [ -z "$2" ]; then
-	cd ~/install
-	INSTALL_PATH=`pwd`
+	INSTALL_PATH="$homedir/install"
 else
 	INSTALL_PATH=$2
 fi
@@ -78,22 +88,45 @@ SRC_PATH=$INSTALL_PATH/src
 sudo apt update
 sudo apt -y upgrade
 
-if [ "$GRC_38" = true ]; then
-	sudo apt -y install git cmake g++ libboost-all-dev libgmp-dev swig python3-numpy \
-python3-mako python3-sphinx python3-lxml doxygen libfftw3-dev libcomedi-dev \
-libsdl1.2-dev libgsl-dev libqwt-qt5-dev libqt5opengl5-dev python3-pyqt5 \
-liblog4cpp5-dev libzmq3-dev python3-yaml python3-click python3-click-plugins \
-python3-zmq 
-else # install the GRC 3.7 dependencies
-	sudo apt -y install git g++ libboost-all-dev python-dev python-mako \
-python-numpy python-wxgtk3.0 python-sphinx python-cheetah swig libzmq3-dev \
-libfftw3-dev libgsl-dev libcppunit-dev doxygen libcomedi-dev libqt4-opengl-dev \
-python-qt4 libqwt-dev libsdl1.2-dev libusb-1.0-0-dev python-gtk2 python-lxml \
-pkg-config python-sip-dev
-fi
+# common dependencies
+sudo apt -y install git cmake g++ libboost-all-dev build-essential libtool
+sudo apt -y install automake autoconf libudev-dev doxygen
+sudo apt -y install libusb-dev libusb-1.0-0-dev libusb-1.0-0 
+sudo apt -y install python-setuptools
+sudo apt -y install libfftw3-dev libfftw3-bin libfftw3-doc
+sudo apt -y install libcppunit-dev libcppunit-doc
+sudo apt -y install ncurses-bin
+sudo apt -y install libfontconfig1-dev libxrender-dev libpulse-dev
+sudo apt -y install fort77 ccache libsdl1.2-dev libgsl-dev
+sudo apt -y install wget xterm libcanberra-gtk-module cpufrequtils
+sudo apt -y install libxi-dev r-base-dev liborc-0.4-0 liborc-0.4-dev
+sudo apt -y install libasound2-dev
+sudo apt -y install libzmq3-dev libzmq5
+sudo apt -y install libcomedi-dev
+sudo apt -y install libgps-dev gpsd gpsd-clients
 
-# install UHD dependencies
-sudo apt -y install cmake build-essential libtool libusb-1.0-0 libusb-1.0-0-dev libudev-dev libncurses5-dev libfftw3-bin libfftw3-doc libcppunit-1.14-0 libcppunit-dev libcppunit-doc ncurses-bin cpufrequtils python-numpy python-numpy-doc python-numpy-dbg python-scipy python-docutils qt4-bin-dbg qt4-default qt4-doc libqt4-dev libqt4-dev-bin python-qt4 python-qt4-dbg python-qt4-dev python-qt4-doc libqwt6abi1 libncurses5 libncurses5-dbg libfontconfig1-dev libxrender-dev libpulse-dev g++ automake autoconf python-dev libusb-dev fort77 libsdl1.2-dev python-wxgtk3.0 ccache python-opengl libgsl-dev python-cheetah python-mako python-lxml qt4-dev-tools libqwtplot3d-qt5-dev pyqt4-dev-tools python-qwt5-qt4 wget libxi-dev gtk2-engines-pixbuf r-base-dev python-tk liborc-0.4-0 liborc-0.4-dev libasound2-dev python-gtk2 libzmq3-dev libzmq5 python-requests python-sphinx libcomedi-dev python-zmq libqwt-dev python-six libgps-dev libgps23 gpsd gpsd-clients python-gps python-setuptools libcanberra-gtk-module xterm
+# dependencies for other packages, could be removed for gnuradio-only installs
+if [ $ubuntu_version == "20" ]; then
+	sudo apt -y install libwxgtk3.0-gtk3-dev
+else
+	sudo apt -y install libwxgtk3.0-dev
+fi
+sudo apt -y install gnuplot
+sudo apt -y install libfltk1.3-dev
+
+if [ "$GRC_38" = true ]; then
+	sudo apt -y install libgmp-dev swig python3-numpy python3-mako \
+		python3-sphinx python3-lxml libqwt-qt5-dev \
+		libqt5opengl5-dev python3-pyqt5 liblog4cpp5-dev \
+		python3-yaml python3-click python3-click-plugins python3-zmq \
+		python3-setuptools python3-opengl python3-pip
+else # install the GRC 3.7 dependencies
+	sudo apt -y install python-dev python-mako \
+		python-numpy python-wxgtk3.0 python-sphinx python-cheetah \
+		swig libqt4-opengl-dev python-qt4 libqwt-dev python-pip \
+		python-gtk2 python-lxml pkg-config python-sip-dev \
+		python-opengl python-tk python-requests python-six python-gps
+fi
 
 # create source and target directories
 sudo -u "$username" mkdir -p $INSTALL_PATH
@@ -148,9 +181,17 @@ sudo -u "$username" git submodule update
 sudo -u "$username" mkdir -p build
 cd build
 if [ "$GRC_38" = true ]; then
-	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ -DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ -DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so -DPYTHON_EXECUTABLE=/usr/bin/python3 ../
+	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
+		-DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ \
+		-DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ \
+		-DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so \
+		-DPYTHON_EXECUTABLE=/usr/bin/python3 \
+		../
 else
-	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ -DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ -DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so ../
+	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
+		-DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ \
+		-DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ \
+		-DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so ../
 fi
 sudo -u "$username" make -j$CORES
 sudo -u "$username" make install
@@ -164,8 +205,8 @@ sudo -u "$username" echo -e "export PATH=\$LOCALPREFIX/bin:\$PATH" >> setup_env.
 sudo -u "$username" echo -e "export LD_LOAD_LIBRARY=\$LOCALPREFIX/lib:\$LD_LOAD_LIBRARY" >> setup_env.sh
 sudo -u "$username" echo -e "export LD_LIBRARY_PATH=\$LOCALPREFIX/lib:\$LD_LIBRARY_PATH" >> setup_env.sh
 if [ "$GRC_38" = true ]; then
-	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3.6/site-packages:\$PYTHONPATH" >> setup_env.sh
-	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3.6/dist-packages:\$PYTHONPATH" >> setup_env.sh
+	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3.8/site-packages:\$PYTHONPATH" >> setup_env.sh
+	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3/dist-packages:\$PYTHONPATH" >> setup_env.sh
 else
 	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python2.7/site-packages:\$PYTHONPATH" >> setup_env.sh
 	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python2.7/dist-packages:\$PYTHONPATH" >> setup_env.sh
@@ -185,12 +226,12 @@ sudo -u "$username" echo -e "export SDR_SRC_DIR=$SRC_PATH" >> setup_env.sh
 sudo -u "$username" echo -e "export GRC_38=$GRC_38" >> setup_env.sh
 
 # add this environment setup script to bashrc unless it's already in there
-if grep -q "$TARGET_PATH/setup_env.sh" ~/.bashrc; then
+if grep -q "$TARGET_PATH/setup_env.sh" $homedir/.bashrc; then
 	:
 else
-	sudo -u "$username" echo -e "" >> ~/.bashrc
-	sudo -u "$username" echo -e "########## points to local install of gnuradio and uhd" >> ~/.bashrc
-	sudo -u "$username" echo -e "source $TARGET_PATH/setup_env.sh" >> ~/.bashrc
+	sudo -u "$username" echo -e "" >> $homedir/.bashrc
+	sudo -u "$username" echo -e "########## points to local install of gnuradio and uhd" >> $homedir/.bashrc
+	sudo -u "$username" echo -e "source $TARGET_PATH/setup_env.sh" >> $homedir/.bashrc
 fi
 
 
