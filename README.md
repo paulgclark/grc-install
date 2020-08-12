@@ -84,7 +84,7 @@ sudo -E ./install_scripts/fosphor_install.sh
 - currently, this only works for gnuradio 3.8
 - currently, this only works on Intel machines with integrated graphics
 
-sudo ./install_scripts/grc_install_flabs_class.sh
+sudo -E ./install_scripts/grc_install_flabs_class.sh
 - contains additional software for those taking a Factoria Labs SDR class
 - you may find it useful even if you're not taking a class...
 
