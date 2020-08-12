@@ -76,7 +76,7 @@ clone_and_build $REPO_URL $GIT_REF
 
 # installing Python code for use in some exercises
 cd "$SDR_SRC_DIR" # the class-specific Python code goes to same place
-sudo -u "$username" git clone https://github.com/paulgclark/flabs_utils
+#sudo -u "$username" git clone https://github.com/paulgclark/flabs_utils
 sudo -u "$username" echo "" >> ~/.bashrc
 sudo -u "$username" echo "################################" >> ~/.bashrc
 sudo -u "$username" echo "# Custom code for gnuradio class" >> ~/.bashrc
