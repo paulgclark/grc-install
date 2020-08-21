@@ -76,14 +76,14 @@ clone_and_build $REPO_URL $GIT_REF
 
 # installing Python code for use in some exercises
 cd "$SDR_SRC_DIR" # the class-specific Python code goes to same place
-#sudo -u "$username" git clone https://github.com/paulgclark/flabs_utils
+sudo -u "$username" git clone https://github.com/paulgclark/rf_utilities
 sudo -u "$username" echo "" >> ~/.bashrc
 sudo -u "$username" echo "################################" >> ~/.bashrc
 sudo -u "$username" echo "# Custom code for gnuradio class" >> ~/.bashrc
-sudo -u "$username" echo "export PYTHONPATH=\$PYTHONPATH:$SDR_SRC_DIR/flabs_utils/flabs_utils"  >> ~/.bashrc
+sudo -u "$username" echo "export PYTHONPATH=\$PYTHONPATH:$SDR_SRC_DIR/rf_utilities"  >> ~/.bashrc
 sudo -u "$username" echo "" >> ~/.bashrc
 
 # other useful stuff
 sudo apt install -y vim
-sudo snap install pycharm-community --classic
+#sudo snap install pycharm-community --classic
 

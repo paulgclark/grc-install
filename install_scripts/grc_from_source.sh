@@ -24,7 +24,7 @@ source ./common/common_functions.sh
 # These are the versions that will be installed for 3.7 and 3.8
 # If you want to install a different version, change these variables
 GRC_37_VERSION="v3.7.13.5"
-GRC_38_VERSION="v3.8.1.0"
+GRC_38_VERSION="v3.8.2.0"
 # If you want to install different versions of uhd, you can see a list of 
 # releases on github, or by running the following command after the recursive
 # clone operation:
