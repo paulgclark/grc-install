@@ -69,7 +69,7 @@ git clone --recursive $GIT_INSTALL_REPO
 
 # get code from a known good version
 cd gr-nordic
-git checkout $GIT_INSTAL_REF
+git checkout $GIT_INSTALL_REF
 git submodule update
 
 # build it

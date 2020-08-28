@@ -29,7 +29,8 @@ GRC_38_VERSION="v3.8.2.0"
 # releases on github, or by running the following command after the recursive
 # clone operation:
 # git tag -l
-UHD_VERSION="v3.15.0.0"
+UHD_37_VERSION="v3.14.1.1"
+UHD_38_VERSION="v3.15.0.0"
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
@@ -120,12 +121,16 @@ if [ "$GRC_38" = true ]; then
 		libqt5opengl5-dev python3-pyqt5 liblog4cpp5-dev \
 		python3-yaml python3-click python3-click-plugins python3-zmq \
 		python3-setuptools python3-opengl python3-pip
+	UHD_VER=$UHD_38_VERSION
+	GRC_VER=$GRC_38_VERSION
 else # install the GRC 3.7 dependencies
 	sudo apt -y install python-dev python-mako \
 		python-numpy python-wxgtk3.0 python-sphinx python-cheetah \
 		swig libqt4-opengl-dev python-qt4 libqwt-dev python-pip \
 		python-gtk2 python-lxml pkg-config python-sip-dev \
 		python-opengl python-tk python-requests python-six python-gps
+	UHD_VER=$UHD_37_VERSION
+	GRC_VER=$GRC_37_VERSION
 fi
 
 # create source and target directories
@@ -141,7 +146,7 @@ sudo -u "$username" git clone --recursive https://github.com/EttusResearch/uhd
 
 # checkout the more recent stable release
 cd $SRC_PATH/uhd
-sudo -u "$username" git checkout $UHD_VERSION
+sudo -u "$username" git checkout $UHD_VER
 sudo -u "$username" git submodule update
 
 # build UHD
@@ -170,11 +175,7 @@ sudo -u "$username" git clone --recursive https://github.com/gnuradio/gnuradio
 
 # checkout the intended release
 cd $SRC_PATH/gnuradio
-if [ "$GRC_38" = true ]; then
-	sudo -u "$username" git checkout $GRC_38_VERSION
-else
-	sudo -u "$username" git checkout $GRC_37_VERSION
-fi
+sudo -u "$username" git checkout $GRC_VER
 sudo -u "$username" git submodule update
 
 # build gnuradio
