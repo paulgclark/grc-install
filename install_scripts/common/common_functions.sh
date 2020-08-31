@@ -1,7 +1,72 @@
 # This file contains common functions shared by many of the 
 # install scripts
 #
-# This script assumes certain BASH variables will be defined
+# This script assumes certain BASH variables will be defined before
+# it is executed. These variables are created during execution of
+# the following script:
+# https://github.com/paulgclark/grc-install/install_scripts/grc_from_source.sh
+
+# this function acquires useful parameters
+function get_basic_info() {
+	# get name of script and its path
+	script_path=$PWD
+	script_name=${0##*/}
+
+	# get username
+	username=$SUDO_USER
+
+	# number of cores to use for make
+	cores=`nproc`
+}
+
+function exit_unless_root() {
+	if [[ $EUID != 0 ]]; then
+        	echo "You are attempting to run the script as user."
+        	echo "Please run with sudo:"
+        	echo "  sudo -E ./$script_name"
+        	exit 1
+	fi
+}
+
+function exit_if_root() {
+	if [[ $EUID == 0 ]]; then
+        	echo "You are attempting to run the script as root."
+        	echo "Please do not run with sudo, but simply run:"
+        	echo "  ./$script_name"
+        	exit 1
+	fi
+}
+
+function check_env_vars() {
+	# there should also be an environment variable for the target and 
+	# source paths; if there is not, quit
+	if [[ -z "$SDR_TARGET_DIR" ]]; then
+        	echo "ERROR: Environment variable \$SDR_TARGET_DIR not defined."
+        	echo "       You should run ./grc_from_source.sh before running"
+        	echo "       this script. If you've already done that, you may"
+	       	echo "       need to open a new terminal and try this script"
+	       	echo "       again."
+        	exit 1
+	fi
+
+	if [[ -z "$SDR_SRC_DIR" ]]; then
+        	echo "ERROR: Environment variable \$SDR_SRC_DIR not defined."
+        	echo "       You should run ./grc_from_source.sh before running"
+        	echo "       this script. If you've already done that, you may"
+	       	echo "       need to open a new terminal and try this script"
+	       	echo "       again."
+        	exit 1
+	fi
+
+	if [[ -z "$GRC_38" ]]; then
+        	echo "ERROR: Environment variable \$GRC_38 not defined."
+        	echo "       You should run ./grc_from_source.sh before running"
+        	echo "       this script. If you've already done that, you may"
+	       	echo "       need to open a new terminal and try this script"
+	       	echo "       again."
+        	exit 1
+	fi
+}
 
 # this function clones and builds code from a cmake-style git repo
 function clone_and_build() {
