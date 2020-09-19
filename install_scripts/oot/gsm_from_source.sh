@@ -50,6 +50,7 @@ fi
 CORES=`nproc`
 
 GSM_VERSION_37="fa184a9447a90aefde2ca0dea1347b702551015d" # latest release
+GSM_VERSION_38="3d50f9f16cf7bc583ffeb5be6db8455423e63b9a" # latest release
 
 # get a know working version or commit
 if [ "$GRC_38" = true ]; then
@@ -59,9 +60,8 @@ if [ "$GRC_38" = true ]; then
 	#GR_OSMOSDR_REPO="https://github.com/???/gr-gsm"
 	# this specific commit has been tested and works
 	#GR_OSMOSDR_REF="???"
-	echo "No known code for gr-gsm that works with gnuradio 3.8"
-	echo "We recommend installing gnuradio 3.7 to another prefix"
-	echo "and running this script on that installation."
+	GR_GSM_REPO="https://github.com/bkerler/gr-gsm"
+	GR_GSM_REF="$GSM_VERSION_38"
 	exit 1
 else
 	GR_GSM_REPO="https://github.com/osmocom/gr-gsm"
