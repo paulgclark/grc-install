@@ -76,6 +76,9 @@ function clone_and_build() {
         cmake_args=$4     # in addition to the prefix build
 	prefix=$5         # defaults to $SDR_TARGET_DIR
 
+	# change directories to current source dir
+	cd $SDR_SRC_DIR
+
         # clone the repo and cd into new the directory 
 	if [[ $user_mode == "user" ]]; then
 		git clone --recursive $git_repo_url

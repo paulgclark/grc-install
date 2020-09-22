@@ -16,74 +16,80 @@
 # If you run this script from another directory, you will break some
 # relative path links and the install will fail.
 
-# get current path and script name
-SCRIPT_PATH=$PWD
-SCRIPT_NAME=${0##*/}
-
-# you should be root, if you are not, quit
-if [[ $EUID != 0 ]]; then
-        echo "You are attempting to run the script as user."
-        echo "Please run with sudo:"
-        echo "  sudo -E ./$SCRIPT_NAME"
-        exit 1
-fi
-
-# there should also be an environment variable for the target and source paths
-# if there is not, quit
-if [[ -z "$SDR_TARGET_DIR" ]]; then
-        echo "ERROR: \$SDR_TARGET_DIR not defined."
-        echo "       You should run ./grc_from_source.sh before running this script."
-        echo "       If you've already done that, you may need to open a new terminal"
-        echo "       and try this script again."
-        exit 1
-fi
-
-if [[ -z "$SDR_SRC_DIR" ]]; then
-        echo "ERROR: \$SDR_SRC_DIR not defined."
-        echo "       You should run ./grc_from_source.sh before running this script."
-        echo "       If you've already done that, you may need to open a new terminal"
-        echo "       and try this script again."
-        exit 1
-fi
-
-# get username
-username=$SUDO_USER
-# number of cores to use for make
-CORES=`nproc`
-# get general functions from the common file
+# first get a few common functions:
 source ./common/common_functions.sh
+
+# call function to get globals: script_path, script_name, user_name, cores
+get_basic_info
+
+# check if running script as root, else exit
+exit_unless_root
+
+# check that the necessary environment vars in place, else exit
+check_env_vars
+
+# determine if we are running in developer mode
+# or if we are running in deploy mode (read-only)
+# check if arg been passed for this, else assume deploy mode
+if [ -z "$1" ]; then
+        deploy_mode=true
+        echo "Installing Factoria Labs extras in read-only DEPLOY mode..."
+elif [ "$1" == "deploy" ]; then
+        deploy_mode=true
+        echo "Installing Factoria Labs extras in read/write DEV mode..."
+        echo "	NOTE: Must have the appropriate GitHub key for this to work"
+elif [ "$1" == "dev" ]; then
+        deploy_mode=false
+        echo "Installing Factoria Labs extras in read-only DEPLOY mode..."
+else
+        echo "Invalid selection. Please enter one of these:"
+        echo "  sudo -E ./$script_name "
+        echo "  sudo -E ./$script_name deploy"
+        echo "  sudo -E ./$script_name dev"
+        exit 1
+fi
 
 VERSION_38="master"
 VERSION_37="maint-3.7"
-REPO_URL="https://github.com/paulgclark/gr-reveng"
+repo_url="https://github.com/paulgclark/gr-reveng"
 
 # select the version of the code based on which gnuradio is installed
 if [ "$GRC_38" = true ]; then
-        GIT_REF="$VERSION_38"
+        repo_ref="$VERSION_38"
 else
-        GIT_REF="$VERSION_37"
+        repo_ref="$VERSION_37"
 fi
-
 
 # install custom blocks
 sudo apt -y install cmake
 sudo apt -y install swig
 
-# get and build the code for gr-rds
+# get and build the code for gr-reveng
 cd $SDR_SRC_DIR
-clone_and_build $REPO_URL $GIT_REF
+clone_and_build $repo_url $repo_ref
 
 
-# installing Python code for use in some exercises
-cd "$SDR_SRC_DIR" # the class-specific Python code goes to same place
-sudo -u "$username" git clone https://github.com/paulgclark/rf_utilities
-sudo -u "$username" echo "" >> ~/.bashrc
-sudo -u "$username" echo "################################" >> ~/.bashrc
-sudo -u "$username" echo "# Custom code for gnuradio class" >> ~/.bashrc
-sudo -u "$username" echo "export PYTHONPATH=\$PYTHONPATH:$SDR_SRC_DIR/rf_utilities"  >> ~/.bashrc
-sudo -u "$username" echo "" >> ~/.bashrc
+# installing Python code for use in some exercises into the same src dir
+cd $SDR_SRC_DIR 
+if [ $deploy_mode == true ]
+	sudo -u "$username" git clone https://github.com/paulgclark/rf_utils
+	sudo -u "$username" echo "" >> ~/.bashrc
+	sudo -u "$username" echo "################################" >> ~/.bashrc
+	sudo -u "$username" echo "# Custom code for gnuradio class" >> ~/.bashrc
+	sudo -u "$username" echo "export PYTHONPATH=\$PYTHONPATH:$SDR_SRC_DIR/rf_utilities"  >> ~/.bashrc
+	sudo -u "$username" echo "" >> ~/.bashrc
+	# install pycharm for classes 2-4
+	sudo snap install pycharm-community --classic
+else 
+	# this won't work without GitHub key on machine
+	sudo -u "$username" git clone https://github.com/paulgclark/flabs_utils
+	sudo -u "$username" echo "" >> ~/.bashrc
+	sudo -u "$username" echo "################################" >> ~/.bashrc
+	sudo -u "$username" echo "# Custom code for gnuradio class" >> ~/.bashrc
+	sudo -u "$username" echo "export PYTHONPATH=\$PYTHONPATH:$SDR_SRC_DIR/flabs_utils/flabs_utils"  >> ~/.bashrc
+	sudo -u "$username" echo "" >> ~/.bashrc
+fi
 
 # other useful stuff
 sudo apt install -y vim
-#sudo snap install pycharm-community --classic
 
