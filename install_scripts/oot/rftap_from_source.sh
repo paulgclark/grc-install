@@ -42,17 +42,12 @@ fi
 CORES=`nproc`
 
 RFTAP_VERSION_37="a17a5a5812aa7714761fd46093cea1320b02e8cf" # latest release
+RFTAP_VERSION_38="a5b6b1baa1ce6adcb7ee73b1e4e403c723a1bfbc" # latest release
 
 # get a know working version or commit
 if [ "$GRC_38" = true ]; then
-	# there is currently no version of gr-rftap that I
-	# know how to get working in 3.8
-
-	# this specific commit has been tested and works
-	#GR_RFTAP_REF="???"
-	echo "No known code for gr-rftap that works with gnuradio 3.8"
-	echo "We recommend installing gnuradio 3.7 to another prefix"
-	echo "and running this script on that installation."
+	GR_RFTAP_REPO="https://github.com/george-hopkins/gr-rftap"
+	GR_RFTAP_REF="$RFTAP_VERSION_38"
 	exit 1
 else
 	GR_RFTAP_REPO="https://github.com/rftap/gr-rftap"
