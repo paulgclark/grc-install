@@ -4,9 +4,9 @@ with support for the UHD drivers. There are also a few additional
 scripts for installing other useful software.
 
 ## Prerequisites
-These scripts have been tested on Ubuntu 18.04.3 LTS. I can't make any 
-promises for other distros or versions. I've tested on both fresh installs
-as well as not-so-fresh and haven't had any problems. If your machine
+These scripts have been tested on Ubuntu 20.04 LTS (with some testing on 18.04).
+I can't make any promises for other distros or versions. I've tested on both fresh 
+installs as well as not-so-fresh and haven't had any problems. If your machine
 does already have a version of gnuradio or the uhd drivers, however, 
 you may want to disable (if you have a PyBombs installation) or remove it.
 
