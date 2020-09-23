@@ -42,6 +42,7 @@ fi
 CORES=`nproc`
 
 REF_VERSION_37="5c468607118e2857d6920708618860ba1a9ea532" # latest tested release
+REF_VERSION_38="3d50f9f16cf7bc583ffeb5be6db8455423e63b9a" # latest tested release
 
 # prereq
 
@@ -53,9 +54,8 @@ if [ "$GRC_38" = true ]; then
 	# this specific commit has been tested and works
 	#GIT_INSTALL_REF="???"
 	#pip3 install --user bitstring
-	echo "No known code for gr-nordic that works with gnuradio 3.8"
-	echo "We recommend installing gnuradio 3.7 to another prefix"
-	echo "and running this script on that installation."
+	GIT_INSTALL_REPO="https://github.com/bkerler/gr-nordic"
+	GIT_INSTALL_REF="$REF_VERSION_38"
 	exit 1
 else
 	GIT_INSTALL_REPO="https://github.com/BastilleResearch/gr-nordic"
