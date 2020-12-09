@@ -49,20 +49,13 @@ fi
 # number of cores to use for make
 CORES=`nproc`
 
+GSM_VERSION_38="995572b14fac0204329361509bf6ab1712af35c0" # latest release
 GSM_VERSION_37="fa184a9447a90aefde2ca0dea1347b702551015d" # latest release
 
 # get a know working version or commit
 if [ "$GRC_38" = true ]; then
-	# there is currently no version of gr-gsm that I
-	# know how to get working in 3.8
-
-	#GR_OSMOSDR_REPO="https://github.com/???/gr-gsm"
-	# this specific commit has been tested and works
-	#GR_OSMOSDR_REF="???"
-	echo "No known code for gr-gsm that works with gnuradio 3.8"
-	echo "We recommend installing gnuradio 3.7 to another prefix"
-	echo "and running this script on that installation."
-	exit 1
+	GR_GSM_REPO="https://github.com/bkerler/gr-gsm"
+	GR_GSM_REF=$GSM_VERSION_38
 else
 	GR_GSM_REPO="https://github.com/osmocom/gr-gsm"
 	GR_GSM_REF="$GSM_VERSION_37"
@@ -76,6 +69,9 @@ git clone --recursive $GR_GSM_REPO
 cd gr-gsm
 git checkout $GR_GSM_REF
 git submodule update
+
+# fix an issue with the inclusion of -lvolk
+sed -i 's/volk/ /' lib/CMakeLists.txt
 
 # build it
 mkdir -p build
