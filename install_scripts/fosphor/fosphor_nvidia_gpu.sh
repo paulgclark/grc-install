@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # This script installs gr-gsm from source. It is intended for
 # execution AFTER the grc_from_source.sh script has been run and will
 # install to the same target directory used for that process.
