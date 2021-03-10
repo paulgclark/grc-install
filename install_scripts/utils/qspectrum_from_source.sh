@@ -2,16 +2,18 @@
 # This script installs qspectrumanalyzer from source. It does not install 
 # globally, but in a local directory, similar to how PyBOMBS operates. You 
 # must first run the gnuradio installation:
-# grc-install/install_scripts/qspectrum_from_source.sh
+# cd grc-install/install_scripts
+# sudo ./grc_from_source.sh
 #
 # If you plan to run with a HackRF, you should also install this before
 # running the qgrx install:
-# grc-install/install_scripts/hackrf_from_source.sh
+# cd grc-install/install_scripts
+# ./hackrf_from_source.sh
 #
 # Finally, you should then open a new window and run this script in 
 # place with the following commands:
 # cd grc-install/install-scripts/utils
-# sudo ./gqrx_from_source.sh
+# sudo -E ./gqrx_from_source.sh
 #
 
 # These are the versions that will be installed for 3.7 and 3.8
