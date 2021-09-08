@@ -23,36 +23,17 @@ LLVM_VERSION="9.0.1"
 FOSPHOR_VER_38="2d4fe78b43bb67907722f998feeb4534ecb1efa8"
 FOSPHOR_VER_37="ffe4a1d7bdef4863e42fe70a7ed58f8c4d682ccd"
 
-# this function clones and builds code from a cmake-style git repo
-function clone_and_build() {
-	git_repo_url=$1
-	release_commit=$2 # can be either a release or commit
-	cmake_args=$3     # in addition to the prefix build 
+# first get a few common functions:
+source ../common/common_functions.sh
 
-	# check out a specific commit
-	sudo -u "$username" git clone --recursive $git_repo_url
-	cd `basename $git_repo_url`
-	sudo -u "$username" git checkout $release_commit
-	sudo -u "$username" git submodule update
-	# build it
-	sudo -u "$username" mkdir build
-	cd build
-	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
-	                          $cmake_args ../ 
-	sudo -u "$username" make
-	sudo -u "$username" make install
-}
+# call function to get globals: script_path, script_name, user_name, cores
+get_basic_info
 
-# get username
-username=$SUDO_USER
+# check if running script as root, else exit
+exit_unless_root
 
-# you should be running as root; if you are not, quit
-if [[ $EUID != 0 ]]; then
-        echo "You are attempting to run the script root without root privileges."
-        echo "Please run with sudo:"
-        echo "  sudo ./fosphor_intel.sh"
-        exit 1
-fi
+# check that the necessary environment vars in place, else exit
+check_env_vars
 
 # check that the CPU manufacturer is correct
 cpu_version_str=`sudo dmidecode -t 4 | grep -i version`
@@ -84,50 +65,14 @@ elif [[ $generation -ge 7 && $generation -le 9 ]]; then
 # a 10th generation part
 elif [[ $generation -eq 1 ]]; then
 	install_beignet=false
-	echo "Got gen 10, installing without beignet"
+	echo "Got gen 10 or greater, installing without beignet"
 else
-	echo "Couldn't identify processor generation"
+	echo "Couldn't identify processor generation, exiting..."
 	exit 1
 fi
 
-# number of cores to use for make
-CORES=`nproc`
-
-# there should also be an environment variable for the target and source paths
-# if there is not, quit
-if [[ -z "$SDR_TARGET_DIR" ]]; then
-        echo "ERROR: \$SDR_TARGET_DIR not defined."
-	echo "       Please make sure you are running sudo -E ./fosphor_intel.sh"
-        echo "       You should run ./grc_from_source.sh before running this script."
-        echo "       If you've already done that, you may need to open a new terminal"
-        echo "       and try this script again."
-        exit 1
-fi
-
-if [[ -z "$SDR_SRC_DIR" ]]; then
-        echo "ERROR: \$SDR_SRC_DIR not defined."
-	echo "       Please make sure you are running sudo -E ./fosphor_intel.sh"
-        echo "       You should run ./grc_from_source.sh before running this script."
-        echo "       If you've already done that, you may need to open a new terminal"
-        echo "       and try this script again."
-        exit 1
-fi
-
-if [[ -z "$GRC_38" ]]; then
-        echo "ERROR: \$GRC_38 not defined."
-	echo "       Please make sure you are running sudo -E ./fosphor_intel.sh"
-        echo "       You should run ./grc_from_source.sh before running this script."
-        echo "       If you've already done that, you may need to open a new terminal"
-        echo "       and try this script again."
-        exit 1
-fi
-
-
 # get current directory (assuming the script is run from local dir)
-SCRIPT_PATH=$PWD
-SRC_PATH=$SDR_SRC_DIR
-TARGET_PATH=$SDR_TARGET_DIR
-cd $SCRIPT_PATH
+cd $script_path
 
 # install dependencies
 if [[ $GRC_38 == true ]]; then
@@ -145,7 +90,7 @@ fi
 
 
 # install glfw
-cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
+cd "$SDR_SRC_DIR" # custom block code lives at same level as gnuradio src
 sudo -u "$username" git clone --recursive https://github.com/glfw/glfw
 cd glfw
 sudo -u "$username" git checkout $GLFW_VERSION
@@ -153,20 +98,22 @@ sudo -u "$username" git submodule update
 # build it
 sudo -u "$username" mkdir build
 cd build
-sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DBUILD_SHARED_LIBS=true ../ 
+sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$SDR_TARGET_DIR -DBUILD_SHARED_LIBS=true ../ 
 sudo -u "$username" make
 sudo -u "$username" make install
 
 
 # install the five intel_deb packages (downloadable?)
-cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
+cd "$SDR_SRC_DIR" # custom block code lives at same level as gnuradio src
 sudo -u "$username" mkdir -p opencl_binaries
 cd opencl_binaries
-sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/19.44.14658/intel-gmmlib_19.3.2_amd64.deb
-sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/19.44.14658/intel-igc-core_1.0.2714.1_amd64.deb
-sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/19.44.14658/intel-igc-opencl_1.0.2714.1_amd64.deb
-sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/19.44.14658/intel-opencl_19.44.14658_amd64.deb
-sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/19.44.14658/intel-ocloc_19.44.14658_amd64.deb
+# updated as of Sep 2021
+sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/21.09.19150/intel-gmmlib_20.3.2_amd64.deb
+sudo -u "$username" wget https://github.com/intel/intel-graphics-compiler/releases/download/igc-1.0.6410/intel-igc-core_1.0.6410_amd64.deb
+sudo -u "$username" wget https://github.com/intel/intel-graphics-compiler/releases/download/igc-1.0.6410/intel-igc-opencl_1.0.6410_amd64.deb
+sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/21.09.19150/intel-opencl_21.09.19150_amd64.deb
+sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/21.09.19150/intel-ocloc_21.09.19150_amd64.deb
+sudo -u "$username" wget https://github.com/intel/compute-runtime/releases/download/21.09.19150/intel-level-zero-gpu_1.0.19150_amd64.deb
 sudo dpkg -i *.deb
 
 
@@ -184,7 +131,7 @@ if [ $install_beignet == true ]; then
 fi
 
 # now install gr-fosphor itself
-cd "$SRC_PATH" # custom block code lives at same level as gnuradio src
+cd "$SDR_SRC_DIR" # custom block code lives at same level as gnuradio src
 sudo -u "$username" git clone --recursive git://git.osmocom.org/gr-fosphor
 cd gr-fosphor
 sudo -u "$username" git checkout $FOSPHOR_REF
@@ -204,7 +151,7 @@ sed -i '/FLG_FOSPHOR_USE_CLGL_SHARING/ s/1<<0/0<<0/' lib/fosphor/private.h
 
 sudo -u "$username" mkdir build
 cd build
-sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
+sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$SDR_TARGET_DIR \
                           -DCMAKE_BUILD_TYPE=RELEASE ../
 sudo -u "$username" make
 sudo -u "$username" make install
