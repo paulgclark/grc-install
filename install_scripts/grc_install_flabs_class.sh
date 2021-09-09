@@ -71,7 +71,7 @@ clone_and_build $repo_url $repo_ref
 
 # installing Python code for use in some exercises into the same src dir
 cd $SDR_SRC_DIR 
-if [ $deploy_mode == true ]
+if [ $deploy_mode == true ]; then
 	sudo -u "$username" git clone https://github.com/paulgclark/rf_utils
 	sudo -u "$username" echo "" >> ~/.bashrc
 	sudo -u "$username" echo "################################" >> ~/.bashrc
