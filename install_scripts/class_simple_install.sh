@@ -13,6 +13,9 @@ cd $SCRIPT_PATH
 # get username
 username=$SUDO_USER
 
+# get CPU core count
+CORES=`nproc`
+
 # next three needed for installing custom blocks (aka OOT blocks)
 sudo apt -y install git
 sudo apt -y install cmake
@@ -32,7 +35,7 @@ cd gr-reveng
 sudo -u $username mkdir build
 cd build
 sudo -u $username cmake ../
-sudo -u $username make
+sudo -u $username make -j$CORES
 sudo make install
 sudo ldconfig
 
@@ -41,10 +44,11 @@ cd $INSTALL_PATH/src
 # run git clone as user so we don't have root owned files in the user space
 sudo -u $username git clone https://github.com/daniestevez/gr-satellites
 cd gr-satellites
+git checkout v3.11.0
 sudo -u $username mkdir build
 cd build
 sudo -u $username cmake ../
-sudo -u $username make
+sudo -u $username make -j$CORES
 sudo make install
 sudo ldconfig
 
