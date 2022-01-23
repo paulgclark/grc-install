@@ -24,6 +24,7 @@ sudo apt -y install swig
 # pre-reqs
 sudo apt -y install liborc-0.4-dev
 sudo apt -y install feh
+sudo apt -y install python3-pip
 sudo pip3 install --upgrade construct requests
 
 # install gr-reveng custom block
