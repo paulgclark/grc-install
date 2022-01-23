@@ -38,11 +38,11 @@ sudo udevadm control --reload-rules
 sudo uhd_images_downloader
 
 # create grc config file with entry to resolve xterm warning
-sudo -u "$username" mkdir ~/.gnuradio # this directory will not exist unless grc already run
-sudo -u "$username" touch ~/.gnuradio/gnuradio.conf
-sudo -u "$username" echo -e "[grc]" >> ~/.gnuradio/gnuradio.conf
-sudo -u "$username" echo -e "xterm_executable=/usr/bin/xterm" >> ~/.gnuradio/gnuradio.conf
+sudo -u $username mkdir /home/$username/.gnuradio # this directory will not exist unless grc already run
+sudo -u $username touch /home/$username/.gnuradio/gnuradio.conf
+sudo -u $username echo -e "[grc]" >> /home/$username/.gnuradio/gnuradio.conf
+sudo -u $username echo -e "xterm_executable=/usr/bin/xterm" >> /home/$username/.gnuradio/gnuradio.conf
 
 # unzip the fm file for testing
 cd $INSTALL_PATH/grc-install/grc
-gunzip fm_c96_s8M.iq.gz
+sudo -u $username gunzip fm_c96_s8M.iq.gz
