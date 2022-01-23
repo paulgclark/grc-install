@@ -25,6 +25,7 @@ sudo apt -y install feh
 # install gr-reveng custom block
 cd $INSTALL_PATH  
 sudo -u $username mkdir -p src
+cd src
 # run git clone as user so we don't have root owned files in the user space
 sudo -u $username git clone https://github.com/paulgclark/gr-reveng
 cd gr-reveng
