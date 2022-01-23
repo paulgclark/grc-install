@@ -45,4 +45,4 @@ sudo -u $username echo -e "xterm_executable=/usr/bin/xterm" >> /home/$username/.
 
 # unzip the fm file for testing
 cd $INSTALL_PATH/grc-install/grc
-sudo -u $username gunzip fm_c96_s8M.iq.gz
+sudo -u $username gunzip fm_c96M_s8M.iq.gz
