@@ -8,7 +8,7 @@ SCRIPT_PATH=$PWD
 # get directory into which git project was cloned
 cd ../..
 INSTALL_PATH=`pwd`
-cd "$SCRIPT_PATH"
+cd $SCRIPT_PATH
 
 # get username
 username=$SUDO_USER
@@ -42,3 +42,7 @@ sudo -u "$username" mkdir ~/.gnuradio # this directory will not exist unless grc
 sudo -u "$username" touch ~/.gnuradio/gnuradio.conf
 sudo -u "$username" echo -e "[grc]" >> ~/.gnuradio/gnuradio.conf
 sudo -u "$username" echo -e "xterm_executable=/usr/bin/xterm" >> ~/.gnuradio/gnuradio.conf
+
+# unzip the fm file for testing
+cd $INSTALL_PATH/grc-install/grc
+gunzip fm_c96_s8M.iq.gz

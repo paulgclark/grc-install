@@ -8,7 +8,7 @@ SCRIPT_PATH=$PWD
 # get directory into which git project was cloned
 cd ../..
 INSTALL_PATH=`pwd`
-cd "$SCRIPT_PATH"
+cd $SCRIPT_PATH
 
 # get username
 username=$SUDO_USER
