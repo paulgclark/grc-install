@@ -24,6 +24,7 @@ sudo apt -y install swig
 # pre-reqs
 sudo apt -y install liborc-0.4-dev
 sudo apt -y install feh
+sudo pip3 install --upgrade construct requests
 
 # install gr-reveng custom block
 cd $INSTALL_PATH  
@@ -39,12 +40,11 @@ sudo -u $username make -j$CORES
 sudo make install
 sudo ldconfig
 
-# install gr-satellites custom block
+# install gr-satellites custom block for gnuradio 3.8
 cd $INSTALL_PATH/src 
 # run git clone as user so we don't have root owned files in the user space
-sudo -u $username git clone https://github.com/daniestevez/gr-satellites
+sudo -u $username git clone -b maint-3.8 https://github.com/daniestevez/gr-satellites
 cd gr-satellites
-git checkout v3.11.0
 sudo -u $username mkdir build
 cd build
 sudo -u $username cmake ../
@@ -63,5 +63,6 @@ sudo -u $username echo "" >> ~/.bashrc
 sudo -u $username echo "################################" >> ~/.bashrc
 sudo -u $username echo "# Custom code for gnuradio class" >> ~/.bashrc
 sudo -u $username echo "export PYTHONPATH=\$PYTHONPATH:$INSTALL_PATH/src/rf_utilities"  >> ~/.bashrc
+sudo -u $username echo "export PYTHONPATH=\$PYTHONPATH:/usr/local/lib/python3/dist-packages"  >> ~/.bashrc
 sudo -u $username echo "" >> ~/.bashrc
 
