@@ -45,6 +45,7 @@ username=$SUDO_USER
 # number of cores to use for make
 CORES=`nproc`
 
+BASTIBL_VERSION_310="maint-3.10"
 BASTIBL_VERSION_38="maint-3.8"
 BASTIBL_VERSION_37="maint-3.7" # replace with specific commits?
 
@@ -53,8 +54,10 @@ REPO_802_11="https://github.com/bastibl/gr-ieee802-11"
 REPO_ZIGBEE="https://github.com/bastibl/gr-ieee802-15-4"
 
 # get a know working version or commit
-if [ "$GRC_38" = true ]; then
+if [ "$GRC_38" == "true" ]; then
 	GIT_REF="$BASTIBL_VERSION_38"
+elif [ "$GRC_310" == "true" ]; then
+	GIT_REF="$BASTIBL_VERSION_310"
 else
 	GIT_REF="$BASTIBL_VERSION_37"
 fi

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 # This script installs the uhd drivers and gnuradio from source. It does
 # not install globally, but in a local directory, similar to how PyBOMBS
 # operates. 
@@ -15,7 +15,7 @@
 # sudo ./grc_from_source.sh
 #
 # Optionally, you can pass arguments for custom values for the following:
-# - gnuradio version ("3.7" or "3.8")
+# - gnuradio version ("3.10, "3.8" or "3.7")
 # - install path
 
 # pull in functions from common file
@@ -25,12 +25,14 @@ source ./common/common_functions.sh
 # If you want to install a different version, change these variables
 GRC_37_VERSION="v3.7.13.5"
 GRC_38_VERSION="v3.8.2.0"
+GRC_310_VERSION="v3.10.5.0"
 # If you want to install different versions of uhd, you can see a list of 
 # releases on github, or by running the following command after the recursive
 # clone operation:
 # git tag -l
 UHD_37_VERSION="v3.14.1.1"
 UHD_38_VERSION="v3.15.0.0"
+UHD_310_VERSION="v4.3.0.0"
 
 # get current directory (assuming the script is run from local dir)
 SCRIPT_PATH=$PWD
@@ -56,20 +58,26 @@ if [[ $EUID != 0 ]]; then
         exit 1
 fi
 
-# determine if we are installing 3.8 (default) or 3.7
+# determine if we are installing 3.8 (default), 3.10, or 3.7
 if [ -z "$1" ]; then
 	GRC_38=true
+	GRC_310=false
 elif [ "$1" == "3.7" ]; then
 	if [ $ubuntu_version == "20" ]; then
 		echo "Cannot install gnuradio 3.7 on an Ubuntu 20 system"
 		exit 1
 	else
 		GRC_38=false
+		GRC_310=false
 	fi
 elif [ "$1" == "3.8" ]; then
 	GRC_38=true
+	GRC_310=false
+elif [ "$1" == "3.10" ]; then
+	GRC_38=false
+	GRC_310=true
 else
-	echo "Invalid GRC version. Please enter either \"3.7\" or \"3.8\""
+	echo "Invalid GRC version. Please enter either \"3.7\", \"3.8\" or \"3.10\""
 	exit 1
 fi
 
@@ -103,8 +111,11 @@ sudo apt -y install wget xterm libcanberra-gtk-module cpufrequtils
 sudo apt -y install libxi-dev r-base-dev liborc-0.4-0 liborc-0.4-dev
 sudo apt -y install libasound2-dev
 sudo apt -y install libzmq3-dev libzmq5
-sudo apt -y install libcomedi-dev
+sudo apt -y install libcomedi-dev 
 sudo apt -y install libgps-dev gpsd gpsd-clients
+# added for gnuradio 3.10
+sudo apt -y install ethtool inetutils-tools libcurses5 libcurses5-dev python3-dev
+sudo apt -y install python3-requests python3-scipy python3-ruamel.yaml
 
 # dependencies for other packages, could be removed for gnuradio-only installs
 if [ $ubuntu_version == "20" ]; then
@@ -123,6 +134,23 @@ if [ "$GRC_38" = true ]; then
 		python3-setuptools python3-opengl python3-pip
 	UHD_VER=$UHD_38_VERSION
 	GRC_VER=$GRC_38_VERSION
+elif [ "$GRC_310" = true ]; then
+        sudo apt -y install libgmp-dev swig python3-numpy python3-mako \
+                python3-sphinx python3-lxml libqwt-qt5-dev \
+                libqt5opengl5-dev python3-pyqt5 liblog4cpp5-dev \
+                python3-yaml python3-click python3-click-plugins python3-zmq \
+                python3-setuptools python3-opengl python3-pip libfmt-dev libspdlog-dev libsndfile1-dev
+
+	# new stuff for uhd 4
+	sudo apt -y install python3-pybind11
+	python3 -m pip install --upgrade pygccxml
+	sudo pip3 install gevent
+	sudo pip3 install mprpc
+	sudo pip3 install pyudev
+	sudo pip3 install pyroute2
+
+        UHD_VER=$UHD_310_VERSION
+        GRC_VER=$GRC_310_VERSION
 else # install the GRC 3.7 dependencies
 	sudo apt -y install python-dev python-mako \
 		python-numpy python-wxgtk3.0 python-sphinx python-cheetah \
@@ -167,6 +195,19 @@ sudo groupadd usrp
 sudo usermod -aG usrp $USER
 sudo sh -c "echo '@usrp\t-\trtprio\t99' >> /etc/security/limits.conf"
 
+############################## VOLK
+#
+if [ "$GRC_310" = true ]; then
+	cd $SRC_PATH
+	sudo -u "$username" git clone --recursive https://github.com/gnuradio/volk.git
+	cd volk
+	sudo -u "$username" mkdir build
+	cd build
+	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python3 ../
+	sudo -u "$username" make -j$CORES
+	sudo -u "$username" make install
+	sudo ldconfig
+fi
 
 ############################## GNURADIO
 # now build gnuradio from source
@@ -188,6 +229,13 @@ if [ "$GRC_38" = true ]; then
 		-DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so \
 		-DPYTHON_EXECUTABLE=/usr/bin/python3 \
 		../
+elif [ "$GRC_310" = true ]; then
+        sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
+                -DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ \
+                -DUHD_INCLUDE_DIRS=$TARGET_PATH/include/ \
+                -DUHD_LIBRARIES=$TARGET_PATH/lib/libuhd.so \
+                -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+                ../
 else
 	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH \
 		-DUHD_DIR=$TARGET_PATH/lib/cmake/uhd/ \
@@ -205,7 +253,7 @@ sudo -u "$username" echo -e "LOCALPREFIX=$TARGET_PATH" >> setup_env.sh
 sudo -u "$username" echo -e "export PATH=\$LOCALPREFIX/bin:\$PATH" >> setup_env.sh
 sudo -u "$username" echo -e "export LD_LOAD_LIBRARY=\$LOCALPREFIX/lib:\$LD_LOAD_LIBRARY" >> setup_env.sh
 sudo -u "$username" echo -e "export LD_LIBRARY_PATH=\$LOCALPREFIX/lib:\$LD_LIBRARY_PATH" >> setup_env.sh
-if [ "$GRC_38" = true ]; then
+if [ "$GRC_38" == "true" ] || [ "$GRC_310" == "true" ]; then
 	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3.8/site-packages:\$PYTHONPATH" >> setup_env.sh
 	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3/dist-packages:\$PYTHONPATH" >> setup_env.sh
 else
