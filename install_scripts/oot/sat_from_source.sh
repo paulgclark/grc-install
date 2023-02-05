@@ -50,13 +50,8 @@ VERSION_38="v3.9.0" # latest release
 VERSION_37="v3.7.0" # latest release
 
 # get a known working version or commit
-if [ "$GRC_38" = true ]; then
-	pip3 install --user --upgrade construct requests
-	GIT_REF=$VERSION_38
-else
-	pip install --user --upgrade construct requests
-	GIT_REF="$VERSION_37"
-fi
+pip3 install --user --upgrade construct requests
+GIT_REF=$VERSION_39
 
 # get code from a known good version
 cd $SDR_SRC_DIR

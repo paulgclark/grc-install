@@ -113,12 +113,57 @@ sudo apt -y install libasound2-dev
 sudo apt -y install libzmq3-dev libzmq5
 sudo apt -y install libcomedi-dev 
 sudo apt -y install libgps-dev gpsd gpsd-clients
+
 # added for gnuradio 3.10
-sudo apt -y install ethtool inetutils-tools libcurses5 libcurses5-dev python3-dev
-sudo apt -y install python3-requests python3-scipy python3-ruamel.yaml
+if [ $GRC_310 == true ]; then
+	sudo apt -y install ethtool inetutils-tools libcurses5 libcurses5-dev python3-dev
+	sudo apt -y install python3-requests python3-scipy python3-ruamel.yaml
+	sudo apt -y install libxml2 libxml2-dev bison flex cmake git libaio-dev libboost-all-dev
+	sudo apt -y install libusb-1.0-0-dev
+	sudo apt -y install libavahi-common-dev libavahi-client-dev
+	sudo apt -y install libcodec2-dev
+	sudo apt -y install libunwind-dev
+	sudo apt -y install libthrift-dev
+	sudo apt -y install python3-jsonschema
+	sudo apt -y install python3-pytest
+	sudo apt -y install libavahi-client3 libavahi-common3
+	sudo apt -y install  libgsm1-dev
+	sudo apt -y install libjs-mathjax
+	sudo apt -y install codec2-dev
+
+	# install libiio
+	cd $SRC_PATH
+	sudo -u "$username" git clone https://github.com/analogdevicesinc/libiio.git
+	cd libiio
+	sudo -u "$username" mkdir -p build
+	cd build
+	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
+	sudo -u "$username" make -j$CORES
+	sudo -u "$username" make install
+
+	# install libad9361-iio
+	cd $SRC_PATH
+	sudo -u "$username" git clone https://github.com/analogdevicesinc/libad9361-iio.git
+	cd libad9361-iio
+	sudo -u "$username" mkdir -p build
+	cd build
+	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
+	sudo -u "$username" make -j$CORES
+	sudo -u "$username" make install
+
+	# install SoapySDR
+	cd $SRC_PATH
+	sudo -u "$username" git clone https://github.com/pothosware/SoapySDR
+	cd SoapySDR
+	sudo -u "$username" mkdir -p build
+	cd build
+	sudo -u "$username" cmake -DCMAKE_INSTALL_PREFIX=$TARGET_PATH ../
+	sudo -u "$username" make -j$CORES
+	sudo -u "$username" make install
+fi
 
 # dependencies for other packages, could be removed for gnuradio-only installs
-if [ $ubuntu_version == "20" ]; then
+if [ $ubuntu_version == "22" ] || [ $ubuntu_version == "20" ]; then
 	sudo apt -y install libwxgtk3.0-gtk3-dev
 else
 	sudo apt -y install libwxgtk3.0-dev
@@ -196,7 +241,7 @@ sudo usermod -aG usrp $USER
 sudo sh -c "echo '@usrp\t-\trtprio\t99' >> /etc/security/limits.conf"
 
 ############################## VOLK
-#
+# After 3.8, Volk is no longer a part of GNU Radio and must be installed separately
 if [ "$GRC_310" = true ]; then
 	cd $SRC_PATH
 	sudo -u "$username" git clone --recursive https://github.com/gnuradio/volk.git
@@ -209,7 +254,7 @@ if [ "$GRC_310" = true ]; then
 	sudo ldconfig
 fi
 
-############################## GNURADIO
+############################## GNU Radio
 # now build gnuradio from source
 cd $SRC_PATH
 sudo -u "$username" git clone --recursive https://github.com/gnuradio/gnuradio
@@ -253,7 +298,10 @@ sudo -u "$username" echo -e "LOCALPREFIX=$TARGET_PATH" >> setup_env.sh
 sudo -u "$username" echo -e "export PATH=\$LOCALPREFIX/bin:\$PATH" >> setup_env.sh
 sudo -u "$username" echo -e "export LD_LOAD_LIBRARY=\$LOCALPREFIX/lib:\$LD_LOAD_LIBRARY" >> setup_env.sh
 sudo -u "$username" echo -e "export LD_LIBRARY_PATH=\$LOCALPREFIX/lib:\$LD_LIBRARY_PATH" >> setup_env.sh
-if [ "$GRC_38" == "true" ] || [ "$GRC_310" == "true" ]; then
+if [ "$GRC_310" == "true" ]; then
+	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3.10/site-packages:\$PYTHONPATH" >> setup_env.sh
+	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3/dist-packages:\$PYTHONPATH" >> setup_env.sh
+elif [ "$GRC_38" == "true" ]; then
 	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3.8/site-packages:\$PYTHONPATH" >> setup_env.sh
 	sudo -u "$username" echo -e "export PYTHONPATH=\$LOCALPREFIX/lib/python3/dist-packages:\$PYTHONPATH" >> setup_env.sh
 else

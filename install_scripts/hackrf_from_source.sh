@@ -42,18 +42,23 @@ fi
 # number of cores to use for make
 CORES=`nproc`
 
-HACKRF_VERSION="v2018.01.1" # latest release
 
 # get a know working version or commit
-if [ "$GRC_38" = true ]; then
+if [ "$GRC_310" = true ]; then
+	GR_OSMOSDR_REPO="https://github.com/osmocom/gr-osmosdr"
+	GR_OSMOSDR_REF="v0.2.4"
+	HACKRF_VERSION="v2023.01.1" # latest release
+elif [ "$GRC_38" = true ]; then
 	# there is currently no version of gr-osmosdr from
 	# the original authors that works with gnuradio 3.8
 	GR_OSMOSDR_REPO="https://github.com/igorauad/gr-osmosdr"
 	# this specific commit has been tested and works
 	GR_OSMOSDR_REF="f3905d3510dfb3851f946f097a9e2ddaa5fb333b"
+	HACKRF_VERSION="v2018.01.1" # latest release
 else
 	GR_OSMOSDR_REPO="https://github.com/osmocom/gr-osmosdr"
 	GR_OSMOSDR_REF="v0.1.4"
+	HACKRF_VERSION="v2018.01.1" # latest release
 fi
 
 # get the repo and put it with the source from the grc install step
