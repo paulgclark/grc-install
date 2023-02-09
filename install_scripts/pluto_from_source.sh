@@ -55,6 +55,9 @@ GR_IIO_REPO="https://github.com/analogdevicesinc/gr-iio"
 LIBIIO_REF="master"
 LIB9361_REF="master"
 
+if [ "$GRC_10" = true ]; then
+	LIBIIO_REF="v0.24"
+	GR_IIO_REF="
 if [ "$GRC_38" = true ]; then
 	GR_IIO_REF="upgrade-3.8"
 else
