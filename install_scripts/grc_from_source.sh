@@ -321,6 +321,7 @@ sudo -u "$username" echo -e "########## these vars assist in follow-on install s
 sudo -u "$username" echo -e "export SDR_TARGET_DIR=\$LOCALPREFIX" >> setup_env.sh
 sudo -u "$username" echo -e "export SDR_SRC_DIR=$SRC_PATH" >> setup_env.sh
 sudo -u "$username" echo -e "export GRC_38=$GRC_38" >> setup_env.sh
+sudo -u "$username" echo -e "export GRC_310=$GRC_310" >> setup_env.sh
 
 # add this environment setup script to bashrc unless it's already in there
 if grep -q "$TARGET_PATH/setup_env.sh" $homedir/.bashrc; then
