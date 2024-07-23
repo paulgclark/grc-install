@@ -106,6 +106,8 @@ sudo snap install pycharm-community --classic
 
 echo "**** Installing Universal Radio Hacker"
 sudo snap install urh
+echo "**** Adding USB access for URH"
+sudo snap connect urh:raw-usb
 
 echo "**********************************************************************"
 echo "Installation complete. You must now reboot, and at the login screen,"
