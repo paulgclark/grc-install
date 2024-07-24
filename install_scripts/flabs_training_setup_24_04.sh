@@ -18,7 +18,6 @@ else
     echo "Exiting..."
   fi
 fi
-echo "got here"
 
 echo "**** Updating existing packages..."
 sudo apt update
@@ -42,12 +41,12 @@ sudo uhd_images_downloader
 
 echo "**** Installing PlutoSDR Drivers"
 sudo apt install -y libiio-utils bison flex cmake
-echo "**** Copying udev rules for SDR hardware"
 
 echo "**** Installing LimeSDR Drivers"
 sudo apt install -y limesuite
 sudo apt install -y gr-limesdr
 
+echo "**** Copying udev rules for SDR hardware"
 (
   cd ../udev-rules || exit
   sudo cp 20-rtlsdr.rules /etc/udev/rules.d/.
