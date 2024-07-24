@@ -1,6 +1,7 @@
 options:
   parameters:
     author: ''
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -41,7 +42,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [112, 72]
+    coordinate: [112, 88.0]
     rotation: 0
     state: enabled
 - name: channel_width
@@ -53,13 +54,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [368, 72]
+    coordinate: [368, 88.0]
     rotation: 0
     state: enabled
 - name: freq
   id: variable_qtgui_entry
   parameters:
     comment: ''
+    entry_signal: editingFinished
     gui_hint: ''
     label: ''
     type: real
@@ -68,7 +70,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [212, 72]
+    coordinate: [208, 88.0]
     rotation: 0
     state: enabled
 - name: msg_str
@@ -80,13 +82,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [932, 27]
+    coordinate: [1000, 24.0]
     rotation: 0
     state: enabled
 - name: noise
   id: variable_qtgui_entry
   parameters:
     comment: ''
+    entry_signal: editingFinished
     gui_hint: ''
     label: ''
     type: real
@@ -95,7 +98,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [676, 124]
+    coordinate: [832, 24.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -107,7 +110,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [12, 72]
+    coordinate: [8, 88.0]
     rotation: 0
     state: enabled
 - name: samples_per_symbol
@@ -119,13 +122,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [668, 68]
+    coordinate: [672, 88.0]
     rotation: 0
     state: enabled
 - name: sensitivity
   id: variable_qtgui_entry
   parameters:
     comment: ''
+    entry_signal: editingFinished
     gui_hint: ''
     label: ''
     type: real
@@ -141,6 +145,7 @@ blocks:
   id: variable_qtgui_entry
   parameters:
     comment: ''
+    entry_signal: editingFinished
     gui_hint: ''
     label: ''
     type: real
@@ -149,7 +154,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [532, 72]
+    coordinate: [528, 88.0]
     rotation: 0
     state: enabled
 - name: symbol_rate
@@ -193,7 +198,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 444]
+    coordinate: [48, 624.0]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0
@@ -209,13 +214,14 @@ blocks:
     offset: '0'
     phase: '0'
     samp_rate: samp_rate
+    showports: 'False'
     type: complex
     waveform: analog.GR_COS_WAVE
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [360, 228]
+    coordinate: [264, 288.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_xx_0
@@ -233,16 +239,18 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 200]
+    coordinate: [504, 224.0]
     rotation: 0
     state: enabled
-- name: blocks_throttle_0
-  id: blocks_throttle
+- name: blocks_throttle2_0
+  id: blocks_throttle2
   parameters:
     affinity: ''
     alias: ''
     comment: ''
     ignoretag: 'True'
+    limit: auto
+    maximum: '0.1'
     maxoutbuf: '0'
     minoutbuf: '0'
     samples_per_second: samp_rate
@@ -252,7 +260,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [860, 196]
+    coordinate: [880, 224.0]
     rotation: 0
     state: enabled
 - name: blocks_uchar_to_float_0
@@ -267,7 +275,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [735, 310]
+    coordinate: [808, 600.0]
     rotation: 0
     state: enabled
 - name: blocks_vector_source_x_0_0
@@ -287,7 +295,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [13, 168]
+    coordinate: [40, 200.0]
     rotation: 0
     state: enabled
 - name: channels_channel_model_0
@@ -308,7 +316,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [676, 168]
+    coordinate: [648, 192.0]
     rotation: 0
     state: enabled
 - name: digital_gfsk_demod_0
@@ -331,7 +339,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [480, 430]
+    coordinate: [552, 612.0]
     rotation: 0
     state: enabled
 - name: digital_gfsk_mod_0
@@ -341,6 +349,7 @@ blocks:
     alias: ''
     bt: '0.35'
     comment: ''
+    do_unpack: 'True'
     log: 'False'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -351,7 +360,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [224, 174]
+    coordinate: [272, 200.0]
     rotation: 0
     state: enabled
 - name: freq_xlating_fir_filter_xxx_0
@@ -371,7 +380,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [228, 452]
+    coordinate: [264, 640.0]
     rotation: 0
     state: enabled
 - name: note_0
@@ -390,7 +399,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 260]
+    coordinate: [544, 360.0]
     rotation: 0
     state: enabled
 - name: qtgui_sink_x_0
@@ -414,41 +423,12 @@ blocks:
     showports: 'True'
     showrf: 'True'
     type: complex
-    wintype: firdes.WIN_BLACKMAN_hARRIS
+    wintype: window.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [228, 336]
-    rotation: 0
-    state: enabled
-- name: qtgui_sink_x_0_0
-  id: qtgui_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    bw: samp_rate
-    comment: ''
-    fc: freq
-    fftsize: '1024'
-    gui_hint: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    name: '"Post-channel Filter"'
-    plotconst: 'True'
-    plotfreq: 'True'
-    plottime: 'True'
-    plotwaterfall: 'True'
-    rate: '10'
-    showports: 'True'
-    showrf: 'True'
-    type: complex
-    wintype: firdes.WIN_BLACKMAN_hARRIS
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [444, 336]
+    coordinate: [264, 520.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -545,7 +525,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 276]
+    coordinate: [1016, 568.0]
     rotation: 0
     state: enabled
 - name: reveng_message_print_0
@@ -559,7 +539,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1027, 515]
+    coordinate: [1048, 720.0]
     rotation: 0
     state: true
 - name: satellites_sync_to_pdu_packed_0
@@ -577,7 +557,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [719, 522]
+    coordinate: [792, 704.0]
     rotation: 0
     state: true
 - name: virtual_sink_0
@@ -590,7 +570,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [996, 196]
+    coordinate: [1048, 232.0]
     rotation: 0
     state: enabled
 - name: virtual_source_0
@@ -603,7 +583,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 364]
+    coordinate: [24, 544.0]
     rotation: 0
     state: enabled
 
@@ -612,17 +592,17 @@ connections:
 - [analog_pwr_squelch_xx_0, '0', qtgui_sink_x_0, '0']
 - [analog_sig_source_x_0, '0', blocks_multiply_xx_0, '1']
 - [blocks_multiply_xx_0, '0', channels_channel_model_0, '0']
-- [blocks_throttle_0, '0', virtual_sink_0, '0']
+- [blocks_throttle2_0, '0', virtual_sink_0, '0']
 - [blocks_uchar_to_float_0, '0', qtgui_time_sink_x_0, '0']
 - [blocks_vector_source_x_0_0, '0', digital_gfsk_mod_0, '0']
-- [channels_channel_model_0, '0', blocks_throttle_0, '0']
+- [channels_channel_model_0, '0', blocks_throttle2_0, '0']
 - [digital_gfsk_demod_0, '0', blocks_uchar_to_float_0, '0']
 - [digital_gfsk_demod_0, '0', satellites_sync_to_pdu_packed_0, '0']
 - [digital_gfsk_mod_0, '0', blocks_multiply_xx_0, '0']
 - [freq_xlating_fir_filter_xxx_0, '0', digital_gfsk_demod_0, '0']
-- [freq_xlating_fir_filter_xxx_0, '0', qtgui_sink_x_0_0, '0']
 - [satellites_sync_to_pdu_packed_0, out, reveng_message_print_0, msg_in]
 - [virtual_source_0, '0', analog_pwr_squelch_xx_0, '0']
 
 metadata:
   file_format: 1
+  grc_version: 3.10.9.2

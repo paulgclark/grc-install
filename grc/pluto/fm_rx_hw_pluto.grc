@@ -37,12 +37,12 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 96e6
+    value: freq - samp_rate / 4
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [208, 12]
+    coordinate: [488, 16.0]
     rotation: 0
     state: enabled
 - name: chan_width
@@ -58,19 +58,24 @@ blocks:
     rotation: 0
     state: enabled
 - name: freq
-  id: variable_qtgui_entry
+  id: variable_qtgui_range
   parameters:
     comment: ''
-    entry_signal: editingFinished
     gui_hint: ''
     label: ''
-    type: real
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: 88.1e6
+    step: 200e3
+    stop: 107.9e6
     value: 94.9e6
+    widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [304, 12]
+    coordinate: [480, 96.0]
     rotation: 0
     state: enabled
 - name: samp_rate
