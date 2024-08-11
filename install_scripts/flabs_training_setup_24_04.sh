@@ -25,7 +25,7 @@ sudo apt -y upgrade
 
 echo "**** Installing prereqs for building OOT modules"
 sudo apt -y install vim git curl wget xz-utils python3-pip
-sudo apt -y install libusb-1.0-0-dev cmake libncurses-dev libtecla1t64 libtecla-dev pkg-config 
+sudo apt -y install libusb-1.0-0-dev cmake libncurses-dev libtecla1t64 libtecla-dev pkg-config libsndfile1-dev
 sudo apt -y install doxygen help2man pandoc
 sudo apt -y install gobject-introspection libboost-all-dev libsctp-dev liborc-0.4-dev \
 intel-opencl-icd clinfo libfreetype6-dev libglfw3-dev libqt5opengl5-dev ocl-icd-opencl-dev \
