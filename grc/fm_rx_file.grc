@@ -1,6 +1,7 @@
 options:
   parameters:
     author: ''
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -36,6 +37,7 @@ blocks:
   id: variable_qtgui_entry
   parameters:
     comment: ''
+    entry_signal: editingFinished
     gui_hint: ''
     label: ''
     type: real
@@ -63,6 +65,7 @@ blocks:
   id: variable_qtgui_entry
   parameters:
     comment: ''
+    entry_signal: editingFinished
     gui_hint: ''
     label: ''
     type: real
@@ -117,7 +120,7 @@ blocks:
     gui_hint: ''
     label: ''
     min_len: '200'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '0'
     step: '1'
@@ -187,7 +190,7 @@ blocks:
       \ the GitHub repo from being \nlarger than necessary but still providing a high\n\
       enough sample rate to detect configuration issues.\n\nAt default tuning, you\
       \ should hear a voice repeating\nthe words \"expected to be.\""
-    file: ./fm_c96M_s8M.iq
+    file: fm_c96M_s8M.iq
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -292,6 +295,7 @@ blocks:
     minoutbuf: '0'
     name: '""'
     nconnections: '1'
+    norm_window: 'False'
     showports: 'True'
     tr_chan: '0'
     tr_level: '0.0'
@@ -310,7 +314,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: firdes.WIN_BLACKMAN_hARRIS
+    wintype: window.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -351,3 +355,4 @@ connections:
 
 metadata:
   file_format: 1
+  grc_version: 3.10.9.2
