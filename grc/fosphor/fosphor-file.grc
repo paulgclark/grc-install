@@ -57,7 +57,7 @@ blocks:
     gui_hint: ''
     label: ''
     type: real
-    value: 50e6
+    value: 8e6
   states:
     bus_sink: false
     bus_source: false
@@ -72,7 +72,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /home/paul/install/grc-install/grc/fm_c96M_s8M.iq
+    file: ../fm_c96M_s8M.iq
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -112,4 +112,4 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.9.2
+  grc_version: 3.10.10.0
